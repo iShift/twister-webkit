@@ -16,3 +16,32 @@ https://github.com/iShift/twister-webkit/releases
 What i need ?
 ==============
 You need to compile and start twisterd daemon https://github.com/miguelfreitas/twister-core
+
+Building own
+==============
+Download pre-compiled or build node-webkit https://github.com/rogerwang/node-webkit
+
+Then:
+
+OS X
+===
+
+1. Make zip archive with 3 files: nw.icns index.html and package.json
+2. Open package by right click "node-webkit.app"
+3. Copy zip archive to to "Contents/Resources" and rename it to "app.nw"
+4. Close package and use your own app
+
+Windows
+===
+
+1. Make zip archive with 2 files: index.html and package.json
+2. Name it as app.nw
+3. In cmd do: copy /b nw.exe+app.nw app.exe 
+4. Perfect use you'r app
+
+Linux
+===
+1. Make zip archive with 2 files: index.html and package.json
+2. Name it as app.nw
+3. In terminal do: cat /usr/bin/nw app.nw > app && chmod +x app  
+4. Perfect use you'r app
