@@ -1,13 +1,18 @@
 twister-webkit
 ==============
 
-Desktop app for twister
+
+
+Desktop app for twister (Multilanguage)
+
+Download https://github.com/iShift/twister-webkit/releases
 
 Screenshots
 ==============
 ![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/screenshot_1.png "Screenshot 1")
 ![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/screenshot_1.png "Screenshot 2")
-
+![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/1.PNG "Screenshot 1")
+![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/2.PNG "Screenshot 2")
 
 Where i can get?
 ==============
