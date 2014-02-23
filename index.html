@@ -2,8 +2,27 @@
 <html>
   <head>
     <title>twister!</title>
+    <style>
+      html, body, iframe {margin:0; padding:0; height:100%; border:none; overflow:hidden}
+      iframe {width:100%; overflow-y:auto}
+    </style>
   </head>
   <body>
-<script>document.location.href = 'http://127.0.0.1:28332/home.html';</script>.
+    <iframe nwdisable nwfaketop id="twister" src="http://127.0.0.1:28332/home.html" frameborder="0" marginheight="0" marginwidth="0" width="100%" height="100%" scrolling="auto"></iframe> 
+    <script>
+      var gui = require('nw.gui'),
+          win = gui.Window.get(),
+          tray = new gui.Tray({
+            icon: 'logo/twister_logo.png',
+            title: 'twister'
+          });
+      win.on('minimize', function() {
+        this.hide();
+      });
+      tray.on('click', function() {
+        win.show();
+        win.focus();
+      });
+    </script>
   </body>
 </html>
