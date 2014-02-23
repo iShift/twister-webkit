@@ -23,6 +23,24 @@
         win.show();
         win.focus();
       });
+      win.on('loaded', function() {
+        var iframedoc = document.getElementById('twister').contentWindow.document,
+            observer = new WebKitMutationObserver(function(mutations) {
+              mutations.forEach(function(mutation) {
+                var title = mutation.target.textContent;
+                tray.title = title;
+                if(title !== 'twister') {
+                  win.show();
+                  win.requestAttention(true);
+                }
+              });
+            });
+        observer.observe(iframedoc.querySelector('head>title'), {
+          subtree: true,
+          characterData: true,
+          childList: true
+        });
+      });
     </script>
   </body>
 </html>
