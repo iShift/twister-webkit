@@ -13,9 +13,9 @@
       var gui = require('nw.gui'),
           win = gui.Window.get(),
           tray = new gui.Tray({
-            icon: 'logo/twister_logo.png',
-            title: 'twister'
+            icon: 'logo/twister_logo.png'
           });
+      tray.tooltip = 'twister';
       win.on('minimize', function() {
         this.hide();
       });
@@ -28,7 +28,7 @@
             observer = new WebKitMutationObserver(function(mutations) {
               mutations.forEach(function(mutation) {
                 var title = mutation.target.textContent;
-                tray.title = title;
+                tray.tooltip = title;
                 if(title !== 'twister') {
                   win.show();
                   win.requestAttention(true);
