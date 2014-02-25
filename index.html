@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title>twister!</title>
     <style>
       html, body, iframe {margin:0; padding:0; height:100%; border:none; overflow:hidden}
@@ -8,39 +9,111 @@
     </style>
   </head>
   <body>
-    <iframe nwdisable nwfaketop id="twister" src="http://127.0.0.1:28332/home.html" frameborder="0" marginheight="0" marginwidth="0" width="100%" height="100%" scrolling="auto"></iframe> 
+    <iframe nwdisable nwfaketop id="twister" src="http://127.0.0.1:28332/home.html" frameborder="0" marginheight="0" marginwidth="0" width="100%" height="100%" scrolling="auto"></iframe>
     <script>
+      document.write('<script src="locale/' + navigator.language + '.js"><\/script>');
+    </script>
+    <script>
+      function __(str) {
+        return (translates && str in translates) ? translates[str] : str;
+      }
+
       var gui = require('nw.gui'),
           win = gui.Window.get(),
           tray = new gui.Tray({
             icon: 'logo/twister_logo.png'
-          });
+          }),
+          menu = new gui.Menu(),
+          focused = true,
+          minimizeToTray   = JSON.parse(localStorage.minimizeToTray   || 'true'),
+          requestAttention = JSON.parse(localStorage.requestAttention || 'true');
+
       tray.tooltip = 'twister';
-      win.on('minimize', function() {
-        this.hide();
-      });
       tray.on('click', function() {
         win.show();
         win.focus();
+        focused = true;
       });
+
+      menu.append(new gui.MenuItem({
+        label: __('Open Twister'),
+        click: function() {
+          win.show();
+          win.focus();
+          focused = true;
+        }
+      }));
+      menu.append(new gui.MenuItem({
+        type: 'separator'
+      }));
+      menu.append(new gui.MenuItem({
+        type: 'checkbox',
+        label: __('Minimize to tray'),
+        checked: minimizeToTray,
+        click: function() {
+          minimizeToTray = this.checked;
+          localStorage.minimizeToTray = JSON.stringify(minimizeToTray);
+          if(!minimizeToTray) {
+            win.show();
+          }
+        }
+      }));
+      menu.append(new gui.MenuItem({
+        type: 'checkbox',
+        label: __('Request attention'),
+        checked: requestAttention,
+        click: function() {
+          requestAttention = this.checked;
+          localStorage.requestAttention = JSON.stringify(requestAttention);
+        }
+      }));
+      menu.append(new gui.MenuItem({
+        type: 'separator'
+      }));
+      menu.append(new gui.MenuItem({
+        label: __('Quit'),
+        click: function() {
+          document.getElementById('twister').contentWindow.exitDaemon();
+        }
+      }));
+      tray.menu = menu;
+
+      win.on('focus', function() {
+        focused = true;
+      });
+      win.on('blur', function() {
+        focused = false;
+      });
+      win.on('minimize', function() {
+        if(minimizeToTray) {
+          this.hide();
+          focused = false;
+        }
+      });
+
       win.on('loaded', function() {
         var iframe = document.getElementById('twister');
         iframe.onload = function() {
-            var title = iframe.contentWindow.document.title;
-            win.title = title;
-            tray.tooltip = title;
+          if(iframe.contentWindow.document.location.pathname === '/abort.html') {
+            gui.App.quit();
+          }
+          var title = iframe.contentWindow.document.title;
+          win.title = title;
+          tray.tooltip = title;
         };
+
         var observer = new WebKitMutationObserver(function(mutations) {
               mutations.forEach(function(mutation) {
                 var title = mutation.target.textContent;
                 win.title = title;
                 tray.tooltip = title;
-                if(title !== 'twister') {
+                if(requestAttention && !focused && title !== 'twister') {
                   win.show();
                   win.requestAttention(true);
                 }
               });
             });
+
         observer.observe(iframe.contentWindow.document.querySelector('head>title'), {
           subtree: true,
           characterData: true,
