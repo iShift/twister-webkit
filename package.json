@@ -6,8 +6,9 @@
   "window": {
     "title": "Twister",
     "toolbar": false,
+    "icon": "logo/twister_logo.png",
     "frame": true,
-    "width": 900,
+    "width": 917,
     "show": true,
     "height": 600,
     "position": "mouse",
