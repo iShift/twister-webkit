@@ -24,10 +24,16 @@
         win.focus();
       });
       win.on('loaded', function() {
-        var iframedoc = document.getElementById('twister').contentWindow.document,
-            observer = new WebKitMutationObserver(function(mutations) {
+        var iframe = document.getElementById('twister');
+        iframe.onload = function() {
+            var title = iframe.contentWindow.document.title;
+            win.title = title;
+            tray.tooltip = title;
+        };
+        var observer = new WebKitMutationObserver(function(mutations) {
               mutations.forEach(function(mutation) {
                 var title = mutation.target.textContent;
+                win.title = title;
                 tray.tooltip = title;
                 if(title !== 'twister') {
                   win.show();
@@ -35,7 +41,7 @@
                 }
               });
             });
-        observer.observe(iframedoc.querySelector('head>title'), {
+        observer.observe(iframe.contentWindow.document.querySelector('head>title'), {
           subtree: true,
           characterData: true,
           childList: true
