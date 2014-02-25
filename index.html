@@ -73,6 +73,12 @@
       menu.append(new gui.MenuItem({
         label: __('Quit'),
         click: function() {
+            gui.App.quit();
+        }
+      }));
+      menu.append(new gui.MenuItem({
+        label: __('Quit & Shutdown'),
+        click: function() {
           document.getElementById('twister').contentWindow.exitDaemon();
         }
       }));
