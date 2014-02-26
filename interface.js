@@ -154,7 +154,9 @@ menuContext.append(new gui.MenuItem({
 menuContext.append(new gui.MenuItem({
     label: __('Reload'),
     click: function () {
-        document.getElementById('twister').contentWindow.location.reload();
+        setTimeout(function() {
+            document.getElementById('twister').contentWindow.location.reload();
+        }, 0);
     }
 }));
 
