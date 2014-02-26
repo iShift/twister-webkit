@@ -19,8 +19,32 @@ function getIframeDocument() {
     return document.getElementById('twister').contentWindow.document;
 }
 
+function onContextMenu(ev) {
+    ev.preventDefault();
+    var el = ev.target,
+        bTextInput = el.nodeName === 'INPUT' || el.nodeName === 'TEXTAREA',
+        iframedoc = getIframeDocument();
+
+    // copy
+    menuContext.items[0].enabled = bTextInput || !iframedoc.getSelection().isCollapsed;
+
+    // copy link
+    while (!(/^(a|html)$/i).test(el.nodeName)) {
+        el = el.parentNode;
+    }
+    contextURL = 'href' in el ? el.href : '';
+    menuContext.items[1].enabled = !!contextURL;
+
+    // paste
+    menuContext.items[2].enabled = bTextInput && !!gui.Clipboard.get().get('text');
+
+    menuContext.popup(ev.x, ev.y);
+    return false;
+}
+
 function onIframeUpdate() {
     var iframedoc = getIframeDocument();
+
     if (iframedoc.location.pathname === '/abort.html') {
         gui.App.quit();
     }
@@ -29,27 +53,7 @@ function onIframeUpdate() {
     win.title = title;
     tray.tooltip = title;
 
-    iframedoc.addEventListener('contextmenu', function (ev) {
-        ev.preventDefault();
-        var el = ev.target,
-            bTextInput = el.nodeName === 'INPUT' || el.nodeName === 'TEXTAREA';
-
-        // copy
-        menuContext.items[0].enabled = bTextInput || !iframedoc.getSelection().isCollapsed;
-
-        // copy link
-        while (!(/^(a|html)$/i).test(el.nodeName)) {
-            el = el.parentNode;
-        }
-        contextURL = 'href' in el ? el.href : '';
-        menuContext.items[1].enabled = !!contextURL;
-
-        // paste
-        menuContext.items[2].enabled = bTextInput && !!gui.Clipboard.get().get('text');
-
-        menuContext.popup(ev.x, ev.y);
-        return false;
-    }, false);
+    iframedoc.addEventListener('contextmenu', onContextMenu, false);
 
     var target = getIframeDocument().querySelector('head > title');
     if (target) {
