@@ -128,7 +128,12 @@ menuTray.append(new gui.MenuItem({
 menuTray.append(new gui.MenuItem({
     label: __('Quit & Shutdown'),
     click: function () {
-        document.getElementById('twister').contentWindow.exitDaemon();
+        var iframeWindow = document.getElementById('twister').contentWindow;
+        if ('exitDaemon' in iframeWindow) {
+            iframeWindow.exitDaemon();
+        } else {
+            gui.App.quit();
+        }
     }
 }));
 
