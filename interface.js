@@ -6,6 +6,7 @@ var gui = require('nw.gui'),
     menuTray = new gui.Menu(),
     menuContext = new gui.Menu(),
     focused = true,
+    hidden = false,
     minimizeToTray = JSON.parse(localStorage.minimizeToTray || 'true'),
     requestAttention = JSON.parse(localStorage.requestAttention || 'true'),
     contextURL = '',
@@ -74,6 +75,7 @@ tray.tooltip = 'twister';
 tray.on('click', function () {
     win.show();
     win.focus();
+    hidden = false;
     focused = true;
 });
 
@@ -85,6 +87,7 @@ menuTray.append(new gui.MenuItem({
     click: function () {
         win.show();
         win.focus();
+        hidden = false;
         focused = true;
     }
 }));
@@ -100,6 +103,7 @@ menuTray.append(new gui.MenuItem({
         localStorage.minimizeToTray = JSON.stringify(minimizeToTray);
         if (!minimizeToTray) {
             win.show();
+            hidden = false;
         }
     }
 }));
@@ -124,7 +128,12 @@ menuTray.append(new gui.MenuItem({
 menuTray.append(new gui.MenuItem({
     label: __('Quit & Shutdown'),
     click: function () {
-        document.getElementById('twister').contentWindow.exitDaemon();
+        var iframeWindow = document.getElementById('twister').contentWindow;
+        if ('exitDaemon' in iframeWindow) {
+            iframeWindow.exitDaemon();
+        } else {
+            gui.App.quit();
+        }
     }
 }));
 
@@ -158,7 +167,7 @@ menuContext.append(new gui.MenuItem({
 menuContext.append(new gui.MenuItem({
     label: __('Reload'),
     click: function () {
-        setTimeout(function() {
+        setTimeout(function () {
             document.getElementById('twister').contentWindow.location.reload();
         }, 0);
     }
@@ -176,6 +185,7 @@ win.on('blur', function () {
 win.on('minimize', function () {
     if (minimizeToTray) {
         this.hide();
+        hidden = true;
         focused = false;
     }
 });
@@ -187,7 +197,10 @@ win.on('loaded', function () {
             win.title = title;
             tray.tooltip = title;
             if (requestAttention && !focused && title !== 'twister') {
-                win.show();
+                if (hidden) {
+                    win.show();
+                    hidden = false;
+                }
                 win.requestAttention(true);
             }
         });
