@@ -1,19 +1,17 @@
  {
-  "main": "index.html",
+  "main": "app/index.html",
   "name": "twister",
   "description": "P2P microbloging system",
   "version": "0.0.1",
   "window": {
     "title": "Twister",
     "toolbar": false,
-    "icon": "logo/twister_logo.png",
+    "icon": "app/logo/twister_logo.png",
     "frame": true,
     "width": 917,
-    "show": true,
+    "show": false,
     "height": 600,
-    "position": "mouse",
-    "min_width": 900,
-    "min_height": 500
+    "position": "mouse"
   },
   "webkit": {
     "plugin": true
