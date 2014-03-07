@@ -1,3 +1,9 @@
+'use strict';
+
+/**
+ * Tray icon & menu
+ */
+
 var gui = require('nw.gui'),
     fs = require('fs'),
     dirname = require('path').dirname,

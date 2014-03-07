@@ -1,3 +1,9 @@
+'use strict';
+
+/**
+ * Context menu
+ */
+
 var gui = require('nw.gui');
 
 window.addEventListener('init', function () {

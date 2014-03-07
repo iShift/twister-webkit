@@ -1,3 +1,9 @@
+'use strict';
+
+/**
+ * Control Twister daemon
+ */
+
 var gui = require('nw.gui'),
     win = gui.Window.get(),
     spawn = require('child_process').spawn,

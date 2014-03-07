@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Translate string
  * @param str string

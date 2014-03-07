@@ -1,3 +1,9 @@
+'use strict';
+
+/**
+ * Twister-webkit settings
+ */
+
 /**
  * Settings class
  * @constructor
