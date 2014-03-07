@@ -9,7 +9,7 @@
     "icon": "app/logo/twister_logo.png",
     "frame": true,
     "width": 917,
-    "show": true,
+    "show": false,
     "height": 600,
     "position": "mouse"
   },
