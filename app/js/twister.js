@@ -37,9 +37,10 @@ window.Twister = function () {
         ],
         curNodeIndex = Infinity,
         childDaemon = null,
-        waitCheckInterval = 100,
-        addNodeInterval = 1000,
-        restartInterval = 500,
+        waitCheckInterval = 500,
+        addNodeInterval = 1500,
+        restartInterval = 1000,
+        rpcCheckTimeout = 400,
         isStop = false,
         isRestart = false,
         isTwisterdOn = false;
@@ -215,28 +216,29 @@ window.Twister = function () {
      */
     function waitTwisterStart(callback) {
         setTimeout(function () {
-            that.isWorking(function (bStarted) {
-                if (bStarted) {
-                    // check initialization of RPC webserver
-                    var req = new XMLHttpRequest();
-                    try {
-                        req.open('HEAD', 'http://' + options.rpcHost + ':' + options.rpcPort + '/', false);
+            if (!isTwisterdOn) {
+                that.isWorking(function (bStarted) {
+                    if (bStarted) {
+                        // check initialization of RPC webserver
+                        req.open('OPTIONS', 'http://' + options.rpcHost + ':' + options.rpcPort + '/');
+                        req.timeout = rpcCheckTimeout;
+                        req.onreadystatechange = function () {
+                            if (req.readyState === 4 && req.status === 200) {
+                                win.setWaitCursor(false);
+                                isTwisterdOn = true;
+                                if (callback) {
+                                    callback();
+                                }
+                                curNodeIndex = 0;
+                                loopAddNodes();
+                                return;
+                            }
+                        };
                         req.send();
-                    } catch (e) {
                     }
-                    if (req.status !== 404) {
-                        win.setWaitCursor(false);
-                        isTwisterdOn = true;
-                        if (callback) {
-                            callback();
-                        }
-                        curNodeIndex = 0;
-                        loopAddNodes();
-                        return;
-                    }
-                }
-                waitTwisterStart(callback);
-            });
+                    waitTwisterStart(callback);
+                });
+            }
         }, waitCheckInterval);
     }
 
