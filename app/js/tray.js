@@ -27,6 +27,11 @@ window.addEventListener('init', function () {
         win.focus();
     }
 
+    // click on the dock icon in MacOS
+    gui.App.on('reopen', function() {
+        restoreFromTray();
+    });
+
     function getThemesList() {
         var files = fs.readdirSync(themeDir),
             dirs = [];
@@ -45,7 +50,6 @@ window.addEventListener('init', function () {
     tray.on('click', function () {
         restoreFromTray();
     });
-
 
     /** TRAY MENU **/
 
