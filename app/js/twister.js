@@ -9,7 +9,8 @@ var gui = require('nw.gui'),
     spawn = require('child_process').spawn,
     dirname = require('path').dirname,
     unlink = require('fs').unlink,
-    isWin32 = (process.platform === 'win32');
+    isWin32 = (process.platform === 'win32'),
+    isMacOS = (process.platform === 'darwin');
 
 // emulate HOME on Windows
 if (isWin32 && !process.env.HOME) {
@@ -27,6 +28,8 @@ window.Twister = function () {
         execDir = dirname(process.execPath),
         ds = (isWin32 ? '\\' : '/'),
         twisterd_path = (isWin32 ? execDir + '\\bin\\twisterd' : 'twisterd'),
+        twisterd_data_dir = './data/',
+        twisterd_themes_dir = execDir + '/html/',
         twisterd_args_common = [],
         options = {},
         twisterNodes = [
@@ -102,7 +105,7 @@ window.Twister = function () {
         options.rpcPassword = settings.rpcPassword || 'pwd';
 
         twisterd_args_common = [
-            '-datadir=./data/',
+            isWin32 ? ('-datadir=' + twisterd_data_dir) : '',
             '-rpcuser=' + options.rpcUser,
             '-rpcpassword=' + options.rpcPassword,
             '-rpcconnect=' + options.rpcHost,
@@ -115,7 +118,7 @@ window.Twister = function () {
         childDaemon = rpcCall([
             '-rpcallowip=127.0.0.1',
             '-port=' + options.port,
-            '-htmldir=./html/' + settings.theme
+            '-htmldir=' + twisterd_themes_dir + settings.theme
         ], function (error) {
             if (!isTwisterdOn) {
                 var event = new CustomEvent('twisterfail');

@@ -16,54 +16,69 @@ module.exports = function (grunt) {
             webkit: ['build'],
             nsis: ['build-win/source', 'build-win/*.exe']
         },
-        wget: {
-            twister_html: {
-                options: {
-                    overwrite: true
-                },
-                files: {
-                    'build/download/twister-theme-default.zip': 'https://codeload.github.com/miguelfreitas/twister-html/zip/master',
-                    'build/download/twister-theme-calm.zip': 'https://codeload.github.com/iHedgehog/twister-calm/zip/master'
-                }
-            },
-            twister_win: {
-                src: 'http://twister.net.co/wp-content/uploads/<%= twister_win_bundle %>.zip',
-                dest: 'build/download/<%= twister_win_bundle %>.zip'
-            }
-        },
-        unzip: {
-            twister_html: {
-                src: 'build/download/twister-theme-default.zip',
-                dest: 'build/themes'
-            },
-            twister_calm: {
-                src: 'build/download/twister-theme-calm.zip',
-                dest: 'build/themes'
-            },
-            twister_win: {
-                src: 'build/download/<%= twister_win_bundle %>.zip',
-                dest: 'build/<%= twister_win_bundle %>'
-            }
-        },
         copy: {
-            html: {
+            app: {
                 files: [
                     {
                         cwd: 'app/',
                         src: ['**'],
                         dest: 'build/source/',
                         expand: true
+                    }
+                ]
+            },
+            theme_default: {
+                files: [
+                    {
+                        cwd: 'build/themes/twister-html-master',
+                        src: ['**'],
+                        dest: 'build/releases/twister/win/twister/html/default/',
+                        expand: true
                     },
                     {
                         cwd: 'build/themes/twister-html-master',
                         src: ['**'],
-                        dest: 'build/source/html/default/',
+                        dest: 'build/releases/twister/mac/twister.app/Contents/Resources/html/default/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/themes/twister-html-master',
+                        src: ['**'],
+                        dest: 'build/releases/twister/linux32/twister/html/default/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/themes/twister-html-master',
+                        src: ['**'],
+                        dest: 'build/releases/twister/linux64/twister/html/default/',
+                        expand: true
+                    }
+                ]
+            },
+            theme_calm: {
+                files: [
+                    {
+                        cwd: 'build/themes/twister-calm-master',
+                        src: ['**'],
+                        dest: 'build/releases/twister/win/twister/html/calm/',
                         expand: true
                     },
                     {
                         cwd: 'build/themes/twister-calm-master',
                         src: ['**'],
-                        dest: 'build/source/html/calm/',
+                        dest: 'build/releases/twister/mac/twister.app/Contents/Resources/html/calm/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/themes/twister-calm-master',
+                        src: ['**'],
+                        dest: 'build/releases/twister/linux32/twister/html/calm/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/themes/twister-calm-master',
+                        src: ['**'],
+                        dest: 'build/releases/twister/linux64/twister/html/calm/',
                         expand: true
                     }
                 ]
@@ -74,6 +89,18 @@ module.exports = function (grunt) {
                         cwd: 'build/releases/twister/win/twister/',
                         src: ['**'],
                         dest: 'build-win/source',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/themes/twister-html-master',
+                        src: ['**'],
+                        dest: 'build-win/source/html/default/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/themes/twister-calm-master',
+                        src: ['**'],
+                        dest: 'build-win/source/html/calm/',
                         expand: true
                     },
                     {
@@ -97,24 +124,6 @@ module.exports = function (grunt) {
                 credits: 'build-mac/credits.html',
                 mac_icns: 'build-mac/nw.icns',
                 keep_nw: true
-            }
-        },
-        zip: {
-            twister_win: {
-                src: 'build/releases/twister/win/**',
-                dest: 'build/twister_win.zip'
-            },
-            twister_mac: {
-                src: 'build/releases/twister/mac/**',
-                dest: 'build/twister_mac.zip'
-            },
-            twister_linux32: {
-                src: 'build/releases/twister/linux32/**',
-                dest: 'build/twister_linux32.zip'
-            },
-            twister_linux64: {
-                src: 'build/releases/twister/linux64/**',
-                dest: 'build/twister_linux64.zip'
             }
         },
         compress: {
@@ -171,6 +180,35 @@ module.exports = function (grunt) {
                 ]
             }
         },
+        wget: {
+            twister_themes: {
+                options: {
+                    overwrite: true
+                },
+                files: {
+                    'build/download/twister-theme-default.zip': 'https://codeload.github.com/miguelfreitas/twister-html/zip/master',
+                    'build/download/twister-theme-calm.zip': 'https://codeload.github.com/iHedgehog/twister-calm/zip/master'
+                }
+            },
+            twister_win: {
+                src: 'http://twister.net.co/wp-content/uploads/<%= twister_win_bundle %>.zip',
+                dest: 'build/download/<%= twister_win_bundle %>.zip'
+            }
+        },
+        unzip: {
+            twister_default: {
+                src: 'build/download/twister-theme-default.zip',
+                dest: 'build/themes'
+            },
+            twister_calm: {
+                src: 'build/download/twister-theme-calm.zip',
+                dest: 'build/themes'
+            },
+            twister_win: {
+                src: 'build/download/<%= twister_win_bundle %>.zip',
+                dest: 'build/<%= twister_win_bundle %>'
+            }
+        },
         exec: {
             nsis: {
                 cwd: 'build-win',
@@ -190,11 +228,13 @@ module.exports = function (grunt) {
 
     // Default task.
     grunt.registerTask('default', [
-        'wget:twister_html',
-        'unzip:twister_html',
-        'unzip:twister_calm',
-        'copy:html',
+        'copy:app',
         'nodewebkit',
+        'wget:twister_themes',
+        'unzip:twister_default',
+        'unzip:twister_calm',
+        'copy:theme_default',
+        'copy:theme_calm',
         'compress'
     ]);
     grunt.registerTask('nsis', [

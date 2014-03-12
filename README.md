@@ -44,6 +44,7 @@ Build Windows setup package
 
 Download and setup NSIS (Nullsoft Scriptable Install System) 2.46: http://nsis.sourceforge.net/Download, and then run
 
+    grunt
     grunt nsis
 
 to download prebuilt version of Twister core for Windows and generate all-in-one setup executable file in

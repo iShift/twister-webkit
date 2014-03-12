@@ -172,6 +172,8 @@ Section "Core Files" SEC01
   File "source\*.dll"
   ; Add twister-core
   File /r "source\bin"
+  ; Themes
+  File /r "source\html"
   ; Create data directory for twisterd daemon files
   CreateDirectory "$INSTDIR\data"
 
@@ -224,6 +226,7 @@ Section Uninstall
   Delete "$INSTDIR\nw.pak"
   Delete "$INSTDIR\*.dll"
   RMDir /r "$INSTDIR\bin"
+  RMDir /r "$INSTDIR\html"
   RMDir /r "$INSTDIR\data"
 
 ; === Delete shortcuts ===
