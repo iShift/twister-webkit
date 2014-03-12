@@ -220,6 +220,7 @@ window.Twister = function () {
                 that.isWorking(function (bStarted) {
                     if (bStarted) {
                         // check initialization of RPC webserver
+                        var req = new XMLHttpRequest();
                         req.open('OPTIONS', 'http://' + options.rpcHost + ':' + options.rpcPort + '/');
                         req.timeout = rpcCheckTimeout;
                         req.onreadystatechange = function () {
@@ -231,7 +232,6 @@ window.Twister = function () {
                                 }
                                 curNodeIndex = 0;
                                 loopAddNodes();
-                                return;
                             }
                         };
                         req.send();
