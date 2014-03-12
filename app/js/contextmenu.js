@@ -10,6 +10,12 @@ window.addEventListener('init', function () {
 
     var menu = new gui.Menu(),
         contextURL = '',
+        itemOpenLink = new gui.MenuItem({
+            label: __('Open in browser'),
+            click: function () {
+                gui.Shell.openExternal(contextURL);
+            }
+        }),
         itemCopy = new gui.MenuItem({
             label: __('Copy'),
             click: function () {
@@ -36,6 +42,7 @@ window.addEventListener('init', function () {
             }
         });
 
+    menu.append(itemOpenLink);
     menu.append(itemCopy);
     menu.append(itemCopyLink);
     menu.append(itemPaste);
@@ -56,6 +63,7 @@ window.addEventListener('init', function () {
             el = el.parentNode;
         }
         contextURL = el.href || '';
+        itemOpenLink.enabled = !!contextURL;
         itemCopyLink.enabled = !!contextURL;
 
         event.preventDefault();

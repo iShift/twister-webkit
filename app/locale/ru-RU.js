@@ -6,6 +6,7 @@ translates = {
     'Always on Top': 'Поверх окон',
     'Run Minimized': 'Запускать свернутым',
     'Quit': 'Выход',
+    'Open in browser': 'Открыть в браузере',
     'Copy': 'Копировать',
     'Copy link': 'Копировать ссылку',
     'Paste': 'Вставить',
