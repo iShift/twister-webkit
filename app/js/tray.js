@@ -12,7 +12,7 @@ var gui = require('nw.gui'),
 window.addEventListener('init', function () {
 
     var tray = new gui.Tray({
-            icon: 'app/logo/twister_icon16.png'
+            icon: 'logo/twister_icon16.png'
         }),
         menuTray = new gui.Menu(),
         skipMinimizeToTray = false,
@@ -152,7 +152,7 @@ window.addEventListener('init', function () {
                 bNewMessages = reNewMessages.test(title);
             win.title = title;
             tray.tooltip = title;
-            tray.icon = 'app/logo/' + (bNewMessages ? 'twister_alticon16.png' : 'twister_icon16.png');
+            tray.icon = 'logo/' + (bNewMessages ? 'twister_alticon16.png' : 'twister_icon16.png');
             if (settings.requestAttention && !win.isFocused && bNewMessages) {
                 if (win.isHidden) {
                     win.show();

@@ -1,0 +1,37 @@
+{
+    "main": "index.html",
+    "name": "twister",
+    "version": "0.9.19",
+    "description": "P2P microbloging system",
+    "window": {
+        "title": "Twister",
+        "toolbar": false,
+        "icon": "logo/twister_logo.png",
+        "frame": true,
+        "show": false,
+        "width": 917,
+        "height": 600,
+        "position": "mouse"
+    },
+    "maintainers": [
+        {
+            "name": "Shift",
+            "email": "shift.rus@gmail.com",
+            "web": "http://jawerty.github.io",
+            "feedback": "https://github.com/iShift/twister-webkit"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://opensource.org/licenses/MIT"
+        }
+    ],
+    "bugs": "https://github.com/iShift/twister-webkit",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/iShift/twister-webkit.git"
+        }
+    ]
+}
