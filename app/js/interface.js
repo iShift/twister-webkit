@@ -43,7 +43,7 @@
     /**
      * Exit after click on Abort button
      */
-    addEventListener('updateIframe', function () {
+    window.addEventListener('updateIframe', function () {
         var iframedoc = window.getIframeDocument();
         if (iframedoc && iframedoc.location.pathname === '/abort.html') {
             win.close();
@@ -57,6 +57,14 @@
         twister.stop(function () {
             win.close(true);
         });
+    });
+
+    /**
+     * Disable drag&drop to window
+     */
+    window.addEventListener('drop', function(e) {
+        e.preventDefault();
+        return false;
     });
 
     /**
