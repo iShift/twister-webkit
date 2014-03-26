@@ -1,6 +1,10 @@
+!ifndef Version
+  StrCpy $Version "0.0.1"
+!endif
+
 ; === Global defines ===
 !define PRODUCT_NAME "Twister"
-!define PRODUCT_VERSION "0.9.19.3"
+!define PRODUCT_VERSION "${Version}"
 !define PRODUCT_MAINEXE "twister.exe"
 !define PRODUCT_ICON "twister.ico"
 !define PRODUCT_WEB_SITE "https://github.com/iShift/twister-webkit"

@@ -29,7 +29,7 @@ window.Twister = function () {
         ds = (isWin32 ? '\\' : '/'),
         twisterd_path = (isWin32 ? execDir + '\\bin\\twisterd' : 'twisterd'),
         twisterd_data_dir = './data/',
-        twisterd_themes_dir = execDir + '/html/',
+        twisterd_themes_dir = './html/', //execDir + '/html/',
         twisterd_args_common = [],
         options = {},
         twisterNodes = [
@@ -214,6 +214,25 @@ window.Twister = function () {
     }
 
     /**
+     * Check running of RPC webserver
+     * @param function callback
+     */
+    function checkTwisterRPC(callback) {
+        var req = new XMLHttpRequest();
+        req.open('OPTIONS', 'http://' + options.rpcHost + ':' + options.rpcPort + '/');
+        req.timeout = rpcCheckTimeout;
+        req.onreadystatechange = function () {
+            if (req.readyState === 4) {
+                var status = (req.status === 200);
+                callback(status);
+            }
+        };
+        req.send();
+    }
+    // @todo: transoft Twister into real class with proto
+    // @todo: use setTimeout/setInterval to check RPC statud each 2 seconds and assign red icom to window and tray
+
+    /**
      * Run callback after Twister is started
      * @param {function} [callback]
      */
@@ -222,22 +241,17 @@ window.Twister = function () {
             if (!isTwisterdOn) {
                 that.isWorking(function (bStarted) {
                     if (bStarted) {
-                        // check initialization of RPC webserver
-                        var req = new XMLHttpRequest();
-                        req.open('OPTIONS', 'http://' + options.rpcHost + ':' + options.rpcPort + '/');
-                        req.timeout = rpcCheckTimeout;
-                        req.onreadystatechange = function () {
-                            if (req.readyState === 4 && req.status === 200) {
+                        checkTwisterRPC(function (status) {
+                            isTwisterdOn = status;
+                            if (status) {
                                 win.setWaitCursor(false);
-                                isTwisterdOn = true;
-                                if (callback) {
-                                    callback();
-                                }
                                 curNodeIndex = 0;
                                 loopAddNodes();
+                                if (callback) {
+                                    setTimeout(callback, 500);
+                                }
                             }
-                        };
-                        req.send();
+                        });
                     }
                     waitTwisterStart(callback);
                 });

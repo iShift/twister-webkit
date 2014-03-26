@@ -1,7 +1,7 @@
 {
     "main": "index.html",
     "name": "twister",
-    "version": "0.9.19",
+    "version": "0.9.19.17",
     "description": "P2P microbloging system",
     "window": {
         "title": "Twister",

@@ -21,6 +21,15 @@
     window.twister = new window.Twister();
 
     /**
+     * Get window element of iframe window
+     * @returns {HTMLWindow}
+     */
+    window.getIframeWindow = function () {
+        var iframe = document.getElementById('twister');
+        return iframe ? iframe.contentWindow : null;
+    };
+
+    /**
      * Get document element of iframe window
      * @returns {HTMLDocument}
      */
@@ -71,7 +80,7 @@
      * Reload iframe document
      */
     win.reloadFrame = function () {
-        document.getElementById('twister').contentWindow.location.reload();
+        window.getIframeWindow().location.reload();
     };
 
     /**

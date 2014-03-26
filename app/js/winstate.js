@@ -144,5 +144,7 @@ win.window.addEventListener('resize', function () {
 
 win.on('close', function () {
     saveWindowState();
-    this.close(true);
+//    setTimeout(function () {
+//        this.close(true);
+//    }, 50);
 });

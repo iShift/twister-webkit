@@ -23,12 +23,14 @@ You need to compile and start twisterd daemon https://github.com/miguelfreitas/t
 Building own
 ============
 
+Install Node.js, npm, and grunt
+
+    sudo apt-get install nodejs npm
+    sudo npm install -g grunt-cli
+
 To build `twister-webkit` just run
 
     npm install
-
-(`Node.js` should be installed to use `npm` manager) and then
-
     grunt
 
 in project's directory. Grunt script downloads all necessary node-webkit prebuild files, Twister themes, and generates

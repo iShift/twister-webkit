@@ -21,7 +21,8 @@
     "scripts": {
         "build": "npm install && grunt"
     },
-    "dependencies": {
+    "dependencies": {},
+    "devDependencies": {
         "grunt-cli": "~0.1.13",
         "grunt": "~0.4.3",
         "grunt-contrib-clean": "~0.5.0",
@@ -31,6 +32,5 @@
         "grunt-node-webkit-builder": "~0.1.17",
         "grunt-wget": "~0.1.0",
         "grunt-zip": "~0.13.0"
-    },
-    "devDependencies": {}
+    }
 }

@@ -8,6 +8,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         // Metadata.
         pkg: grunt.file.readJSON('package.json'),
+        app: grunt.file.readJSON('app/package.json'),
         twister_win32_bundle: 'twister-0.9.19-win32-bundle',
         nsis_path: (process.arch === 'x64' ? '%ProgramFiles(x86)%' : '%ProgramFiles%') + '\\NSIS\\',
 
@@ -161,9 +162,22 @@ module.exports = function (grunt) {
                 files: [
                     {
                         cwd: 'build/releases/twister/linux32/',
-                        src: ['**'],
+                        src: ['twister/html/**', 'twister/nw.pak', 'twister/libffmpegsumo.so'],
                         expand: true
-                    }
+                    },
+                    {
+                        cwd: 'build/releases/twister/linux32/',
+                        src: ['twister/twister'],
+                        mode: 484, // = 0744
+                        expand: true
+                    },
+                    {
+                        cwd: 'build-linux/',
+                        src: ['twister.sh', 'build-twister.sh'],
+                        dest: 'twister/',
+                        mode: 484, // = 0744
+                        expand: true
+                    },
                 ]
             },
             twister_linux_x64: {
@@ -174,9 +188,22 @@ module.exports = function (grunt) {
                 files: [
                     {
                         cwd: 'build/releases/twister/linux64/',
-                        src: ['**'],
+                        src: ['twister/html/**', 'twister/nw.pak', 'twister/libffmpegsumo.so'],
                         expand: true
-                    }
+                    },
+                    {
+                        cwd: 'build/releases/twister/linux64/',
+                        src: ['twister/twister'],
+                        mode: 484, // = 0744
+                        expand: true
+                    },
+                    {
+                        cwd: 'build-linux/',
+                        src: ['twister.sh', 'build-twister.sh'],
+                        dest: 'twister/',
+                        mode: 484, // = 0744
+                        expand: true
+                    },
                 ]
             }
         },
@@ -212,7 +239,7 @@ module.exports = function (grunt) {
         exec: {
             nsis: {
                 cwd: 'build-win',
-                command: '"<%= nsis_path %>makensis" setup.nsi'
+                command: '"<%= nsis_path %>makensis" /DVersion="<%= app.version %>" setup.nsi'
             }
         }
     });
