@@ -5,4 +5,4 @@ cd twister-core
 ./autotool.sh
 ./configure
 make
-make install
+sudo cp -i twisterd /usr/local/bin
