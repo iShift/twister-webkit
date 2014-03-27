@@ -151,6 +151,13 @@ module.exports = function (grunt) {
                         cwd: 'build/releases/twister/mac/',
                         src: ['**'],
                         expand: true
+                    },
+                    {
+                        cwd: 'build-linux/',
+                        src: ['build-twister.sh'],
+                        dest: 'twister/',
+                        mode: 484, // = 0744
+                        expand: true
                     }
                 ]
             },
@@ -177,7 +184,7 @@ module.exports = function (grunt) {
                         dest: 'twister/',
                         mode: 484, // = 0744
                         expand: true
-                    },
+                    }
                 ]
             },
             twister_linux_x64: {
@@ -203,7 +210,7 @@ module.exports = function (grunt) {
                         dest: 'twister/',
                         mode: 484, // = 0744
                         expand: true
-                    },
+                    }
                 ]
             }
         },
