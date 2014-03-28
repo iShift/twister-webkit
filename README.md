@@ -35,10 +35,10 @@ To build `twister-webkit` just run
 
 in project's directory. Grunt script downloads all necessary node-webkit prebuild files, Twister themes, and generates
 executable files for Windows, MacOS, Linux32 and Linux64:
-- `build/twister_win.zip`
-- `build/twister_mac.tar.gz`
-- `build/twister_linux32.tar.gz`
-- `build/twister_linux64.tar.gz`
+- `build/twister_win_ia32.zip`
+- `build/twister_osx_ia32.tar.gz`
+- `build/twister_linux_ia32.tar.gz`
+- `build/twister_linux_x64.tar.gz`
 
 
 Build Windows setup package
