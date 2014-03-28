@@ -184,6 +184,12 @@ module.exports = function (grunt) {
                         dest: 'twister/',
                         mode: 484, // = 0744
                         expand: true
+                    },
+                    {
+                        cwd: 'build-linux/',
+                        src: ['*.png'],
+                        dest: 'twister/',
+                        expand: true
                     }
                 ]
             },
@@ -209,6 +215,12 @@ module.exports = function (grunt) {
                         src: ['twister.sh', 'build-twister.sh'],
                         dest: 'twister/',
                         mode: 484, // = 0744
+                        expand: true
+                    },
+                    {
+                        cwd: 'build-linux/',
+                        src: ['*.png'],
+                        dest: 'twister/',
                         expand: true
                     }
                 ]

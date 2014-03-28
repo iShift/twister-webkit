@@ -11,18 +11,17 @@ case `echo -n x` in
 *)
   ECHO_N='-n';;
 esac
-
-# some terminal codes ...
 boldface="`tput bold 2>/dev/null`"
 normal="`tput sgr0 2>/dev/null`"
-
 printbold() {
   echo $ECHO_N "$boldface" $ECHO_C
   echo "$@"
   echo $ECHO_N "$normal" $ECHO_C
 }
 
+
 printbold "Twister - p2p microbloging system - daemon installer"
+
 
 which -s brew
 if [[ $? != 0 ]] ; then
@@ -35,6 +34,7 @@ printbold "Updating brew..."
 brew update
 fi
 
+
 printbold "Installing dependencies..."
 
 which -s git || brew install git
@@ -46,15 +46,18 @@ which -s autoconf || brew install autoconf
 which -s automake || brew install automake
 which -s libtool || brew install libtool
 
+
 printbold "Cloning twister-core repository..."
 
 git clone https://github.com/miguelfreitas/twister-core.git
 cd twister-core
 
+
 printbold "Configuring twister-daemon..."
 
 ./autotool.sh
 ./configure --enable-logging --with-openssl=/usr/local/opt/openssl --with-libdb=/usr/local/opt/berkeley-db4
+
 
 printbold "Building twister daemon..."
 
@@ -62,8 +65,10 @@ CPUCORES=$(sysctl hw.ncpu | awk '{print $2}')
 echo "You have $CPUCORES cores in your CPU"
 make -j $CPUCORES
 
+
 printbold "Copying twisterd to /usr/local/bin..."
 
 sudo cp -i twisterd /usr/local/bin
+
 
 printbold "OK, twisterd has been built successfully."
