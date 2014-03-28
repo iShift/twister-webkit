@@ -8,7 +8,7 @@ var gui = require('nw.gui'),
     win = gui.Window.get(),
     spawn = require('child_process').spawn,
     dirname = require('path').dirname,
-    unlink = require('fs').unlink,
+    mkdir = require('fs').mkdirSync,
     isWin32 = (process.platform === 'win32'),
     isMacOS = (process.platform === 'darwin');
 
@@ -16,7 +16,6 @@ var gui = require('nw.gui'),
 if (isWin32 && !process.env.HOME) {
     process.env.HOME = process.env.HOMEDRIVE + process.env.HOMEPATH;
 }
-
 
 /**
  * Twister
@@ -47,6 +46,8 @@ window.Twister = function () {
         isStop = false,
         isRestart = false,
         isTwisterdOn = false;
+
+    mkdir(execDir + ds + 'data');
 
     /**
      * Do RPC call to twisterd
@@ -88,6 +89,14 @@ window.Twister = function () {
         return child;
     }
 
+    function initOptions() {
+        options.port = settings.port || 28333;
+        options.rpcHost = settings.rpcHost || '127.0.0.1';
+        options.rpcPort = settings.rpcPort || 28332;
+        options.rpcUser = settings.rpcUser || 'user';
+        options.rpcPassword = settings.rpcPassword || 'pwd';
+    }
+
     /**
      * Start Twister daemon
      * @param {function} [callback]
@@ -98,11 +107,7 @@ window.Twister = function () {
             return;
         }
 
-        options.port = settings.port || 28333;
-        options.rpcHost = settings.rpcHost || '127.0.0.1';
-        options.rpcPort = settings.rpcPort || 28332;
-        options.rpcUser = settings.rpcUser || 'user';
-        options.rpcPassword = settings.rpcPassword || 'pwd';
+        initOptions();
 
         twisterd_args_common = [
             isWin32 ? ('-datadir=' + twisterd_data_dir) : '',
@@ -136,6 +141,8 @@ window.Twister = function () {
      * @param {function} [callback]
      */
     this.tryStart = function (callback) {
+        initOptions();
+
         that.isWorking(function (bStarted) {
             if (!bStarted) {
                 twister.start(callback);
@@ -240,18 +247,14 @@ window.Twister = function () {
         setTimeout(function () {
             if (!isTwisterdOn) {
                 that.isWorking(function (bStarted) {
+                    isTwisterdOn = bStarted;
                     if (bStarted) {
-                        checkTwisterRPC(function (status) {
-                            isTwisterdOn = status;
-                            if (status) {
-                                win.setWaitCursor(false);
-                                curNodeIndex = 0;
-                                loopAddNodes();
-                                if (callback) {
-                                    setTimeout(callback, 500);
-                                }
-                            }
-                        });
+                        win.setWaitCursor(false);
+                        curNodeIndex = 0;
+                        loopAddNodes();
+                        if (callback) {
+                            setTimeout(callback, 500);
+                        }
                     }
                     waitTwisterStart(callback);
                 });
@@ -279,15 +282,20 @@ window.Twister = function () {
     }
 
     /**
-     * Check that twister is executed (by its .lock file)
+     * Check that twister is executed
      * @param {function} [callback]
      */
     this.isWorking = function (callback) {
-        var lockFile = execDir + ds + 'data' + ds + '.lock';
-
-        unlink(lockFile, function (err) {
-            callback(err && err.code === 'EPERM');
-        });
+        var req = new XMLHttpRequest();
+        req.open('OPTIONS', 'http://' + options.rpcHost + ':' + options.rpcPort + '/');
+        req.timeout = rpcCheckTimeout;
+        req.onreadystatechange = function () {
+            if (req.readyState === 4) {
+                var status = (req.status === 200);
+                callback(status);
+            }
+        };
+        req.send();
     };
 
 };
