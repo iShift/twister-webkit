@@ -1,22 +1,46 @@
-#!/bin/bash -x
-echo "Twister - p2p microbloging system - daemon installer"
+#!/bin/bash
 
-echo "Installing dependencies"
+ECHO_C=
+ECHO_N=
+case `echo -n x` in
+-n*)
+  case `echo 'x\c'` in
+  *c*) ;;
+  *)   ECHO_C='\c';;
+  esac;;
+*)
+  ECHO_N='-n';;
+esac
+boldface="`tput bold 2>/dev/null`"
+normal="`tput sgr0 2>/dev/null`"
+printbold() {
+  echo $ECHO_N "$boldface" $ECHO_C
+  echo "$@"
+  echo $ECHO_N "$normal" $ECHO_C
+}
+
+printbold "Twister - p2p microbloging system - daemon installer"
+
+printbold "Installing dependencies..."
+
 sudo apt-get install autoconf build-essential git libboost-all-dev libdb++-dev libminiupnpc-dev libssl-dev libtool
 
-echo "Cloning twister-core repository"
+printbold "Cloning twister-core repository..."
+
 git clone https://github.com/miguelfreitas/twister-core.git
 cd twister-core
 
-echo "Configuring twister-daemon"
+printbold "Configuring twister-daemon..."
+
 ./autotool.sh
 ./configure --enable-logging
 
-echo "Building twister daemon"
+printbold "Building twister daemon..."
+
 make
 
-echo "Copying twisterd to /usr/local/bin"
+printbold "Copying twisterd to /usr/local/bin..."
+
 sudo cp -i twisterd /usr/local/bin
 
-echo "OK, twisterd has been built successfully"
-echo "-------------"
+printbold "OK, twisterd has been built successfully."
