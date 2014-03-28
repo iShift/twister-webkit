@@ -42,16 +42,22 @@
         win.isFocused = false;
     };
 
-    function focusHandler() {
+    function focusHandler(e) {
         win.isFocused = true;
     }
 
-    function blurHandler() {
+    function blurHandler(e) {
         win.isFocused = false;
     }
 
     win.on('focus', focusHandler);
     win.on('blur', blurHandler);
-    window.addEventListener('focus', focusHandler);
-    window.addEventListener('blur', blurHandler);
+    window.addEventListener('focus', focusHandler, true);
+    window.addEventListener('blur', blurHandler, true);
+
+    addEventListener('updateIframe', function () {
+        var iframewin = window.getIframeWindow();
+        iframewin.addEventListener('focus', focusHandler, true);
+        iframewin.addEventListener('blur', blurHandler, true);
+    });
 })();

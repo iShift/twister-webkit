@@ -12,7 +12,7 @@ var gui = require('nw.gui'),
 window.addEventListener('init', function () {
 
     var tray = new gui.Tray({
-            icon: 'app/logo/twister_icon16.png'
+            icon: 'logo/twister_icon16.png'
         }),
         menuTray = new gui.Menu(),
         skipMinimizeToTray = false,
@@ -26,6 +26,11 @@ window.addEventListener('init', function () {
         win.show();
         win.focus();
     }
+
+    // click on the dock icon in MacOS
+    gui.App.on('reopen', function () {
+        restoreFromTray();
+    });
 
     function getThemesList() {
         var files = fs.readdirSync(themeDir),
@@ -45,7 +50,6 @@ window.addEventListener('init', function () {
     tray.on('click', function () {
         restoreFromTray();
     });
-
 
     /** TRAY MENU **/
 
@@ -94,6 +98,13 @@ window.addEventListener('init', function () {
                 settings.runMinimized = this.checked;
             }
         }),
+        itemRestart = new gui.MenuItem({
+            label: __('Restart'),
+            click: function () {
+                win.isBroken = true;
+                twister.restart(win.onTwisterStart);
+            }
+        }),
         itemQuit = new gui.MenuItem({
             label: __('Quit'),
             click: function () {
@@ -131,12 +142,14 @@ window.addEventListener('init', function () {
     menuTray.append(itemAlwaysOnTop);
     menuTray.append(itemRunMinimized);
     menuTray.append(new gui.MenuItem({type: 'separator'}));
+    menuTray.append(itemRestart);
     menuTray.append(itemQuit);
 
     tray.menu = menuTray;
 
     win.on('minimize', function () {
         if (settings.minimizeToTray && !skipMinimizeToTray) {
+            win.blur();
             win.hide();
         }
         skipMinimizeToTray = false;
@@ -145,10 +158,15 @@ window.addEventListener('init', function () {
     observer = new WebKitMutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
             var title = mutation.target.textContent,
+                bNewMessages;
+            if (mutation.target.parentNode.tagName === 'TITLE') {
+                win.title = title;
+                tray.tooltip = title;
                 bNewMessages = reNewMessages.test(title);
-            win.title = title;
-            tray.tooltip = title;
-            tray.icon = 'app/logo/' + (bNewMessages ? 'twister_alticon16.png' : 'twister_icon16.png');
+                tray.icon = 'logo/' + (bNewMessages ? 'twister_alticon16.png' : 'twister_icon16.png');
+            } else {
+                bNewMessages = (title !== '');
+            }
             if (settings.requestAttention && !win.isFocused && bNewMessages) {
                 if (win.isHidden) {
                     win.show();
@@ -176,7 +194,8 @@ window.addEventListener('init', function () {
          * Watch title changes
          * @type {Node}
          */
-        var target = iframedoc.querySelector('head > title');
+        var target = iframedoc.querySelector('head > title, .messages-qtd');
+        observer.disconnect();
         if (target) {
             observer.observe(target, {
                 subtree: true,

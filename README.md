@@ -1,52 +1,53 @@
 twister-webkit
 ==============
 
-
-
 Desktop app for twister (Multilanguage)
 
 Download https://github.com/iShift/twister-webkit/releases
 
 Screenshots
-==============
+===========
 ![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/screenshot_1.png "Screenshot 1")
 ![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/screenshot_1.png "Screenshot 2")
 ![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/1.PNG "Screenshot 1")
 ![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/2.PNG "Screenshot 2")
 
 Where i can get?
-==============
+================
 https://github.com/iShift/twister-webkit/releases
 
 What i need ?
-==============
+=============
 You need to compile and start twisterd daemon https://github.com/miguelfreitas/twister-core
 
 Building own
-==============
-Download pre-compiled or build node-webkit https://github.com/rogerwang/node-webkit
+============
 
-Then:
+Install Node.js, npm, and grunt
 
-OS X
-===
+    sudo apt-get install nodejs npm
+    sudo npm install -g grunt-cli
 
-1. Make zip archive with 3 files: nw.icns index.html and package.json
-2. Open package by right click "node-webkit.app"
-3. Copy zip archive to to "Contents/Resources" and rename it to "app.nw"
-4. Close package and use your own app
+To build `twister-webkit` just run
 
-Windows
-===
+    npm install
+    grunt
 
-1. Make zip archive with 2 files: index.html and package.json
-2. Name it as app.nw
-3. In cmd do: copy /b nw.exe+app.nw app.exe 
-4. Perfect use you'r app
+in project's directory. Grunt script downloads all necessary node-webkit prebuild files, Twister themes, and generates
+executable files for Windows, MacOS, Linux32 and Linux64:
+- `build/twister_win_ia32.zip`
+- `build/twister_osx_ia32.tar.gz`
+- `build/twister_linux_ia32.tar.gz`
+- `build/twister_linux_x64.tar.gz`
 
-Linux
-===
-1. Make zip archive with 2 files: index.html and package.json
-2. Name it as app.nw
-3. In terminal do: cat /usr/bin/nw app.nw > app && chmod +x app  
-4. Perfect use you'r app
+
+Build Windows setup package
+===========================
+
+Download and setup NSIS (Nullsoft Scriptable Install System) 2.46: http://nsis.sourceforge.net/Download, and then run
+
+    grunt
+    grunt nsis
+
+to download prebuilt version of Twister core for Windows and generate all-in-one setup executable file in
+`build-win/Twister-[ver].exe`.

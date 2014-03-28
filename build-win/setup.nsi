@@ -1,6 +1,10 @@
+!ifndef Version
+  StrCpy $Version "0.0.1"
+!endif
+
 ; === Global defines ===
 !define PRODUCT_NAME "Twister"
-!define PRODUCT_VERSION "0.9.19.2"
+!define PRODUCT_VERSION "${Version}"
 !define PRODUCT_MAINEXE "twister.exe"
 !define PRODUCT_ICON "twister.ico"
 !define PRODUCT_WEB_SITE "https://github.com/iShift/twister-webkit"
@@ -165,18 +169,15 @@ Section "Core Files" SEC01
   SetOutPath "$INSTDIR"
 
 ; === Add Files ===
+  File "${PRODUCT_ICON}"
   ; Add node-webkit files
-  File "..\${PRODUCT_MAINEXE}"
-  File "..\nw.pak"
-  File "..\*.dll"
-  ; Add twister-webkit files
-  File "..\package.json"
-  File "..\${PRODUCT_ICON}"
-  File /r "..\app"
+  File "source\${PRODUCT_MAINEXE}"
+  File "source\nw.pak"
+  File "source\*.dll"
   ; Add twister-core
-  File /r "..\bin"
-  ; Add themes (twister-html etc.)
-  File /r "..\html"
+  File /r "source\bin"
+  ; Themes
+  File /r "source\html"
   ; Create data directory for twisterd daemon files
   CreateDirectory "$INSTDIR\data"
 
@@ -224,14 +225,13 @@ Section Uninstall
 
 ; === Delete files and directories ===
   Delete "$INSTDIR\uninst.exe"
-  Delete "$INSTDIR\${PRODUCT_MAINEXE}"
   Delete "$INSTDIR\${PRODUCT_ICON}"
+  Delete "$INSTDIR\${PRODUCT_MAINEXE}"
   Delete "$INSTDIR\nw.pak"
-  Delete "$INSTDIR\package.json"
-  RMDir /r "$INSTDIR\app"
+  Delete "$INSTDIR\*.dll"
   RMDir /r "$INSTDIR\bin"
-  RMDir /r "$INSTDIR\data"
   RMDir /r "$INSTDIR\html"
+  RMDir /r "$INSTDIR\data"
 
 ; === Delete shortcuts ===
   Delete "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}.lnk"

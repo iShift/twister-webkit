@@ -8,14 +8,14 @@ var gui = require('nw.gui'),
     win = gui.Window.get(),
     spawn = require('child_process').spawn,
     dirname = require('path').dirname,
-    unlink = require('fs').unlink,
-    isWin32 = (process.platform === 'win32');
+    mkdir = require('fs').mkdirSync,
+    isWin32 = (process.platform === 'win32'),
+    isMacOS = (process.platform === 'darwin');
 
 // emulate HOME on Windows
 if (isWin32 && !process.env.HOME) {
     process.env.HOME = process.env.HOMEDRIVE + process.env.HOMEPATH;
 }
-
 
 /**
  * Twister
@@ -27,6 +27,8 @@ window.Twister = function () {
         execDir = dirname(process.execPath),
         ds = (isWin32 ? '\\' : '/'),
         twisterd_path = (isWin32 ? execDir + '\\bin\\twisterd' : 'twisterd'),
+        twisterd_data_dir = './data/',
+        twisterd_themes_dir = './html/', //execDir + '/html/',
         twisterd_args_common = [],
         options = {},
         twisterNodes = [
@@ -37,12 +39,15 @@ window.Twister = function () {
         ],
         curNodeIndex = Infinity,
         childDaemon = null,
-        waitCheckInterval = 100,
-        addNodeInterval = 1000,
-        restartInterval = 500,
+        waitCheckInterval = 500,
+        addNodeInterval = 1500,
+        restartInterval = 1000,
+        rpcCheckTimeout = 400,
         isStop = false,
         isRestart = false,
         isTwisterdOn = false;
+
+    mkdir(execDir + ds + 'data');
 
     /**
      * Do RPC call to twisterd
@@ -84,6 +89,14 @@ window.Twister = function () {
         return child;
     }
 
+    function initOptions() {
+        options.port = settings.port || 28333;
+        options.rpcHost = settings.rpcHost || '127.0.0.1';
+        options.rpcPort = settings.rpcPort || 28332;
+        options.rpcUser = settings.rpcUser || 'user';
+        options.rpcPassword = settings.rpcPassword || 'pwd';
+    }
+
     /**
      * Start Twister daemon
      * @param {function} [callback]
@@ -94,14 +107,10 @@ window.Twister = function () {
             return;
         }
 
-        options.port = settings.port || 28333;
-        options.rpcHost = settings.rpcHost || '127.0.0.1';
-        options.rpcPort = settings.rpcPort || 28332;
-        options.rpcUser = settings.rpcUser || 'user';
-        options.rpcPassword = settings.rpcPassword || 'pwd';
+        initOptions();
 
         twisterd_args_common = [
-            '-datadir=./data/',
+            isWin32 ? ('-datadir=' + twisterd_data_dir) : '',
             '-rpcuser=' + options.rpcUser,
             '-rpcpassword=' + options.rpcPassword,
             '-rpcconnect=' + options.rpcHost,
@@ -114,7 +123,7 @@ window.Twister = function () {
         childDaemon = rpcCall([
             '-rpcallowip=127.0.0.1',
             '-port=' + options.port,
-            '-htmldir=./html/' + settings.theme
+            '-htmldir=' + twisterd_themes_dir + settings.theme
         ], function (error) {
             if (!isTwisterdOn) {
                 var event = new CustomEvent('twisterfail');
@@ -132,6 +141,8 @@ window.Twister = function () {
      * @param {function} [callback]
      */
     this.tryStart = function (callback) {
+        initOptions();
+
         that.isWorking(function (bStarted) {
             if (!bStarted) {
                 twister.start(callback);
@@ -210,33 +221,44 @@ window.Twister = function () {
     }
 
     /**
+     * Check running of RPC webserver
+     * @param function callback
+     */
+    function checkTwisterRPC(callback) {
+        var req = new XMLHttpRequest();
+        req.open('OPTIONS', 'http://' + options.rpcHost + ':' + options.rpcPort + '/');
+        req.timeout = rpcCheckTimeout;
+        req.onreadystatechange = function () {
+            if (req.readyState === 4) {
+                var status = (req.status === 200);
+                callback(status);
+            }
+        };
+        req.send();
+    }
+    // @todo: transoft Twister into real class with proto
+    // @todo: use setTimeout/setInterval to check RPC statud each 2 seconds and assign red icom to window and tray
+
+    /**
      * Run callback after Twister is started
      * @param {function} [callback]
      */
     function waitTwisterStart(callback) {
         setTimeout(function () {
-            that.isWorking(function (bStarted) {
-                if (bStarted) {
-                    // check initialization of RPC webserver
-                    var req = new XMLHttpRequest();
-                    try {
-                        req.open('HEAD', 'http://' + options.rpcHost + ':' + options.rpcPort + '/', false);
-                        req.send();
-                    } catch (e) {
-                    }
-                    if (req.status !== 404) {
+            if (!isTwisterdOn) {
+                that.isWorking(function (bStarted) {
+                    isTwisterdOn = bStarted;
+                    if (bStarted) {
                         win.setWaitCursor(false);
-                        isTwisterdOn = true;
-                        if (callback) {
-                            callback();
-                        }
                         curNodeIndex = 0;
                         loopAddNodes();
-                        return;
+                        if (callback) {
+                            setTimeout(callback, 500);
+                        }
                     }
-                }
-                waitTwisterStart(callback);
-            });
+                    waitTwisterStart(callback);
+                });
+            }
         }, waitCheckInterval);
     }
 
@@ -260,15 +282,20 @@ window.Twister = function () {
     }
 
     /**
-     * Check that twister is executed (by its .lock file)
+     * Check that twister is executed
      * @param {function} [callback]
      */
     this.isWorking = function (callback) {
-        var lockFile = execDir + ds + 'data' + ds + '.lock';
-
-        unlink(lockFile, function (err) {
-            callback(err && err.code === 'EPERM');
-        });
+        var req = new XMLHttpRequest();
+        req.open('OPTIONS', 'http://' + options.rpcHost + ':' + options.rpcPort + '/');
+        req.timeout = rpcCheckTimeout;
+        req.onreadystatechange = function () {
+            if (req.readyState === 4) {
+                var status = (req.status === 200);
+                callback(status);
+            }
+        };
+        req.send();
     };
 
 };

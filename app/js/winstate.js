@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 /**
  * Cross-platform window state preservation.
  * Yes this code is quite complicated, but this is the best I came up with for
@@ -40,7 +41,7 @@ function initWindowState() {
         }
     } else {
         currWinMode = 'normal';
-        deltaHeight = 0
+        deltaHeight = 0;
         dumpWindowState();
     }
 
@@ -77,8 +78,8 @@ function dumpWindowState() {
 function restoreWindowState() {
     // deltaHeight already saved, so just restore it and adjust window height
     if (typeof winState.deltaHeight !== 'undefined') {
-        deltaHeight = winState.deltaHeight
-        winState.height = winState.height - deltaHeight
+        deltaHeight = winState.deltaHeight;
+        winState.height = winState.height - deltaHeight;
     }
 
     win.resizeTo(winState.width, winState.height);
@@ -143,5 +144,7 @@ win.window.addEventListener('resize', function () {
 
 win.on('close', function () {
     saveWindowState();
-    this.close(true);
+//    setTimeout(function () {
+//        this.close(true);
+//    }, 50);
 });

@@ -21,6 +21,15 @@
     window.twister = new window.Twister();
 
     /**
+     * Get window element of iframe window
+     * @returns {HTMLWindow}
+     */
+    window.getIframeWindow = function () {
+        var iframe = document.getElementById('twister');
+        return iframe ? iframe.contentWindow : null;
+    };
+
+    /**
      * Get document element of iframe window
      * @returns {HTMLDocument}
      */
@@ -43,7 +52,7 @@
     /**
      * Exit after click on Abort button
      */
-    addEventListener('updateIframe', function () {
+    window.addEventListener('updateIframe', function () {
         var iframedoc = window.getIframeDocument();
         if (iframedoc && iframedoc.location.pathname === '/abort.html') {
             win.close();
@@ -60,10 +69,18 @@
     });
 
     /**
+     * Disable drag&drop to window
+     */
+    window.addEventListener('drop', function(e) {
+        e.preventDefault();
+        return false;
+    });
+
+    /**
      * Reload iframe document
      */
     win.reloadFrame = function () {
-        document.getElementById('twister').contentWindow.location.reload();
+        window.getIframeWindow().location.reload();
     };
 
     /**
