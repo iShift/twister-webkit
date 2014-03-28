@@ -26,7 +26,6 @@
         "grunt-cli": "~0.1.13",
         "grunt": "~0.4.3",
         "grunt-contrib-clean": "~0.5.0",
-/*        "grunt-contrib-compress": "~0.7.0",*/
         "grunt-contrib-compress": "https://github.com/dryabov/grunt-contrib-compress/tarball/39ad2e2a5af4531ef39ebd31bef7ceb05241336c",
         "grunt-contrib-copy": "~0.5.0",
         "grunt-exec": "~0.4.5",
