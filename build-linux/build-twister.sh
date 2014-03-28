@@ -71,6 +71,7 @@ Exec=$CWD/twister.sh
 Terminal=false
 Icon=$CWD/twister_logo.png
 EOF
+chmod +x Twister.desktop
 
 
 printbold "OK, twisterd has been built successfully."
