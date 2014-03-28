@@ -47,7 +47,9 @@ window.Twister = function () {
         isRestart = false,
         isTwisterdOn = false;
 
-    mkdir(execDir + ds + 'data');
+    try {
+        mkdir(execDir + ds + 'data');
+    } catch(e) {}
 
     /**
      * Do RPC call to twisterd
