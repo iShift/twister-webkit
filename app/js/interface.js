@@ -6,9 +6,6 @@
 
 (function () {
 
-    var gui = require('nw.gui'),
-        win = gui.Window.get();
-
     /**
      * Setting object
      * @type {window.Settings}

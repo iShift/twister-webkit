@@ -8,10 +8,7 @@
         "toolbar": false,
         "icon": "logo/twister_logo.png",
         "frame": true,
-        "show": false,
-        "width": 917,
-        "height": 600,
-        "position": "mouse"
+        "show": false
     },
     "maintainers": [
         {
