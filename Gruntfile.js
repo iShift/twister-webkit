@@ -124,7 +124,7 @@ module.exports = function (grunt) {
                 linux64: true,
                 credits: 'build-mac/credits.html',
                 mac_icns: 'build-mac/nw.icns',
-                keep_nw: true
+                keep_nw: false
             }
         },
         compress: {
@@ -150,6 +150,7 @@ module.exports = function (grunt) {
                     {
                         cwd: 'build/releases/twister/mac/',
                         src: ['**'],
+                        mode: 484, // = 0744
                         expand: true
                     },
                     {

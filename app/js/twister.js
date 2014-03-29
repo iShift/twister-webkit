@@ -129,7 +129,10 @@ window.Twister = function () {
         ], function (error) {
             if (!isTwisterdOn) {
                 var event = new CustomEvent('twisterfail');
-                event.error = error;
+                event.error = {
+                    message: error.message,
+                    code: error.code
+                };
                 window.dispatchEvent(event);
             }
             childDaemon = null;
@@ -222,24 +225,8 @@ window.Twister = function () {
         }, addNodeInterval);
     }
 
-    /**
-     * Check running of RPC webserver
-     * @param function callback
-     */
-    function checkTwisterRPC(callback) {
-        var req = new XMLHttpRequest();
-        req.open('OPTIONS', 'http://' + options.rpcHost + ':' + options.rpcPort + '/');
-        req.timeout = rpcCheckTimeout;
-        req.onreadystatechange = function () {
-            if (req.readyState === 4) {
-                var status = (req.status === 200);
-                callback(status);
-            }
-        };
-        req.send();
-    }
-    // @todo: transoft Twister into real class with proto
-    // @todo: use setTimeout/setInterval to check RPC statud each 2 seconds and assign red icom to window and tray
+    // @todo: transform Twister into real class with proto
+    // @todo: use setTimeout/setInterval to check RPC status each 2 seconds and assign red icon to window and tray
 
     /**
      * Run callback after Twister is started

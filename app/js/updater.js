@@ -1,7 +1,6 @@
 'use strict';
 
-var gui = require('nw.gui'),
-    https = require('https');
+var gui = require('nw.gui');
 
 window.addEventListener('init', function () {
 
