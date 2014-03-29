@@ -4,19 +4,6 @@
  * Control Twister daemon
  */
 
-var gui = require('nw.gui'),
-    win = gui.Window.get(),
-    spawn = require('child_process').spawn,
-    dirname = require('path').dirname,
-    mkdir = require('fs').mkdirSync,
-    isWin32 = (process.platform === 'win32'),
-    isMacOS = (process.platform === 'darwin');
-
-// emulate HOME on Windows
-if (isWin32 && !process.env.HOME) {
-    process.env.HOME = process.env.HOMEDRIVE + process.env.HOMEPATH;
-}
-
 /**
  * Twister
  * @constructor
@@ -24,11 +11,9 @@ if (isWin32 && !process.env.HOME) {
 window.Twister = function () {
 
     var that = this,
-        execDir = dirname(process.execPath),
-        ds = (isWin32 ? '\\' : '/'),
-        twisterd_path = (isWin32 ? execDir + '\\bin\\twisterd' : 'twisterd'),
+        twisterd_path = (isWin32 ? appDir + '\\bin\\twisterd' : 'twisterd'),
         twisterd_data_dir = './data/',
-        twisterd_themes_dir = './html/', //execDir + '/html/',
+        twisterd_themes_dir = './html/', //appDir + '/html/',
         twisterd_args_common = [],
         options = {},
         twisterNodes = [
@@ -48,8 +33,9 @@ window.Twister = function () {
         isTwisterdOn = false;
 
     try {
-        mkdir(execDir + ds + 'data');
-    } catch(e) {}
+        fs.mkdirSync(appDir + ds + 'data');
+    } catch (e) {
+    }
 
     /**
      * Do RPC call to twisterd
@@ -61,7 +47,7 @@ window.Twister = function () {
         var twisterd_args = [].concat(twisterd_args_common, args);
 
         var child = spawn(twisterd_path, twisterd_args, {
-            cwd: execDir,
+            cwd: appDir,
             env: process.env
         });
 

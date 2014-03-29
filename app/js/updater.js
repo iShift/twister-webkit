@@ -1,7 +1,5 @@
 'use strict';
 
-var gui = require('nw.gui');
-
 window.addEventListener('init', function () {
 
     var currentVersion = gui.App.manifest.version,

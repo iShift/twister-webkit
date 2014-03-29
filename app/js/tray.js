@@ -4,11 +4,6 @@
  * Tray icon & menu
  */
 
-var gui = require('nw.gui'),
-    fs = require('fs'),
-    dirname = require('path').dirname,
-    win = gui.Window.get();
-
 window.addEventListener('init', function () {
 
     var tray = new gui.Tray({
@@ -18,9 +13,7 @@ window.addEventListener('init', function () {
         skipMinimizeToTray = false,
         reNewMessages = /^\(\d+\)/,
         observer,
-        execDir = dirname(process.execPath),
-        ds = (process.platform === 'win32' ? '\\' : '/'),
-        themeDir = execDir + ds + 'html';
+        themeDir = appDir + ds + 'html';
 
     function restoreFromTray() {
         win.show();

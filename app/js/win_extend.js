@@ -5,9 +5,6 @@
  */
 (function () {
 
-    var gui = require('nw.gui'),
-        win = gui.Window.get();
-
     win.isFocused = true;
     win.isHidden = false;
 
