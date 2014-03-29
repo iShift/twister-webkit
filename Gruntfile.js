@@ -153,9 +153,8 @@ module.exports = function (grunt) {
                         expand: true
                     },
                     {
-                        cwd: 'build-linux/',
+                        cwd: 'build-mac/',
                         src: ['build-twister.sh'],
-                        dest: 'twister/',
                         mode: 484, // = 0744
                         expand: true
                     }
