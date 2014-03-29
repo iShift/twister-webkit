@@ -71,7 +71,7 @@
     /**
      * Disable drag&drop to window
      */
-    window.addEventListener('drop', function(e) {
+    window.addEventListener('drop', function (e) {
         e.preventDefault();
         return false;
     });
@@ -137,14 +137,16 @@
         win.minimize();
     }
 
-    /**
-     * Trigger init event before start Twister daemon
-     */
-    window.dispatchEvent(new CustomEvent('init'));
+    window.addEventListener('load', function () {
+        /**
+         * Trigger init event before start Twister daemon
+         */
+        window.dispatchEvent(new CustomEvent('init'));
 
-    /**
-     * Start Twister daemon
-     */
-    twister.tryStart(win.onTwisterStart);
+        /**
+         * Start Twister daemon
+         */
+        twister.tryStart(win.onTwisterStart);
+    });
 
 })();

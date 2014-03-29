@@ -4,7 +4,8 @@
  * Context menu
  */
 
-var gui = require('nw.gui');
+var gui = require('nw.gui'),
+    win = gui.Window.get();
 
 window.addEventListener('init', function () {
 
