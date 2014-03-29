@@ -22,7 +22,7 @@
 
     /**
      * Get window element of iframe window
-     * @returns {HTMLWindow}
+     * @returns {Window}
      */
     window.getIframeWindow = function () {
         var iframe = document.getElementById('twister');

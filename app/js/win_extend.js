@@ -42,11 +42,11 @@
         win.isFocused = false;
     };
 
-    function focusHandler(e) {
+    function focusHandler() {
         win.isFocused = true;
     }
 
-    function blurHandler(e) {
+    function blurHandler() {
         win.isFocused = false;
     }
 
