@@ -33,7 +33,6 @@
 
 
     function initWindowState() {
-        console.log(localStorage.windowState);
         winState = JSON.parse(localStorage.windowState || 'null');
 
         if (winState) {
