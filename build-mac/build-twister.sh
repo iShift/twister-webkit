@@ -66,9 +66,9 @@ echo "You have $CPUCORES cores in your CPU"
 make -j $CPUCORES
 
 
-printbold "Copying twisterd to /usr/local/bin..."
+printbold "Copying twisterd to /usr/bin..."
 
-sudo cp -i twisterd /usr/local/bin
+sudo cp -i twisterd /usr/bin
 
 
 printbold "OK, twisterd has been built successfully."
