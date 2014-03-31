@@ -24,3 +24,5 @@ var gui = require('nw.gui'),
 if (isWin32 && !process.env.HOME) {
     process.env.HOME = process.env.HOMEDRIVE + process.env.HOMEPATH;
 }
+
+process.chdir(appDir);

@@ -98,7 +98,7 @@ window.Twister = function () {
         initOptions();
 
         twisterd_args_common = [
-            isWin32 ? ('-datadir=' + twisterd_data_dir) : '',
+            '-datadir=' + twisterd_data_dir,
             '-rpcuser=' + options.rpcUser,
             '-rpcpassword=' + options.rpcPassword,
             '-rpcconnect=' + options.rpcHost,
