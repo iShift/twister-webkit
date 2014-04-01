@@ -7,7 +7,7 @@
 window.addEventListener('init', function () {
 
     var tray = new gui.Tray({
-            icon: 'logo/twister_icon16.png'
+            icon: (isMac ? 'logo/twister_icon16_mac.png' : 'logo/twister_icon16.png')
         }),
         menuTray = new gui.Menu(),
         skipMinimizeToTray = false,
@@ -156,7 +156,7 @@ window.addEventListener('init', function () {
                 win.title = title;
                 tray.tooltip = title;
                 bNewMessages = reNewMessages.test(title);
-                tray.icon = 'logo/' + (bNewMessages ? 'twister_alticon16.png' : 'twister_icon16.png');
+                tray.icon = 'logo/twister_' + (bNewMessages ? 'alticon16' : (isMac ? 'icon16_mac' : 'icon16')) + '.png';
             } else {
                 bNewMessages = (title !== '');
             }
