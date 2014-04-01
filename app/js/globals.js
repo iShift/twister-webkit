@@ -14,6 +14,7 @@ var gui = require('nw.gui'),
     isWin32 = (process.platform === 'win32'),
     isMacOS = (process.platform === 'darwin'),
     ds = (isWin32 ? '\\' : '/'),
+
     appDir = (
         isMacOS
             ? dirname(dirname(dirname(dirname(dirname(process.execPath))))) + '/Resources'
@@ -24,5 +25,3 @@ var gui = require('nw.gui'),
 if (isWin32 && !process.env.HOME) {
     process.env.HOME = process.env.HOMEDRIVE + process.env.HOMEPATH;
 }
-
-process.chdir(appDir);
