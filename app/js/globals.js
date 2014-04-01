@@ -12,11 +12,11 @@ var gui = require('nw.gui'),
     spawn   = require('child_process').spawn,
 
     isWin32 = (process.platform === 'win32'),
-    isMacOS = (process.platform === 'darwin'),
+    isMac   = (process.platform === 'darwin'),
     ds = (isWin32 ? '\\' : '/'),
 
     appDir = (
-        isMacOS
+        isMac
             ? dirname(dirname(dirname(dirname(dirname(process.execPath))))) + '/Resources'
             : dirname(process.execPath)
     );
