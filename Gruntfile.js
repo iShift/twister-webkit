@@ -4,6 +4,15 @@ module.exports = function (grunt) {
 
     grunt.util.linefeed = '\n';
 
+    // Platforms
+    var inputPlatforms = grunt.option('platforms') || 'all',
+        buildPlatforms = {
+            mac: /mac|all/.test(inputPlatforms),
+            win: /win|all/.test(inputPlatforms),
+            linux32: /linux32|all/.test(inputPlatforms),
+            linux64: /linux64|all/.test(inputPlatforms)
+        };
+
     // Project configuration.
     grunt.initConfig({
         // Metadata.
@@ -118,13 +127,12 @@ module.exports = function (grunt) {
             options: {
                 build_dir: 'build',
                 version: '0.9.2',
-                win: true,
-                mac: true,
-                linux32: true,
-                linux64: true,
+                win: buildPlatforms.win,
+                mac: buildPlatforms.mac,
+                linux32: buildPlatforms.linux32,
+                linux64: buildPlatforms.linux64,
                 credits: 'build-mac/credits.html',
-                mac_icns: 'build-mac/nw.icns',
-                keep_nw: false
+                mac_icns: 'build-mac/nw.icns'
             }
         },
         compress: {
