@@ -19,6 +19,8 @@
 
 ; The best compression
 SetCompressor /SOLID lzma
+CRCCheck on
+RequestExecutionLevel user
 
 ; MUI 2 ------
 !include "MUI2.nsh"
