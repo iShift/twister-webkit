@@ -66,18 +66,33 @@
     });
 
     /**
+     * Cancel all new windows (Middle clicks / New Tab)
+     */
+    win.on('new-win-policy', function (frame, url, policy) {
+        policy.ignore();
+    });
+
+    /**
      * Disable drag&drop to window
      */
-    window.addEventListener('drop', function (e) {
+    function preventDefault(e) {
         e.preventDefault();
         return false;
-    });
+    }
+
+    window.addEventListener("dragover", preventDefault, false);
+    window.addEventListener("drop", preventDefault, false);
+    window.addEventListener("dragstart", preventDefault, false);
 
     /**
      * Reload iframe document
      */
     win.reloadFrame = function () {
         window.getIframeWindow().location.reload();
+    };
+
+    win.updateTheme = function () {
+        window.getIframeDocument().location = 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/' + settings.theme + '/home.html';
     };
 
     /**
@@ -87,7 +102,7 @@
     window.addEventListener('twister', function () {
         if (win.isBroken) {
             win.isBroken = false;
-            window.getIframeDocument().location = 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/home.html';
+            win.updateTheme();
         }
     });
 

@@ -121,8 +121,10 @@ window.addEventListener('init', function () {
                     }
                 }
                 settings.theme = theme;
-                win.isBroken = true;
-                twister.restart(win.onTwisterStart);
+                win.updateTheme();
+//                win.isBroken = true;
+//                twister.restart(win.onTwisterStart);
+//                win.reloadFrame();
             }
         }));
     });

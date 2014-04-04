@@ -11,9 +11,9 @@
 window.Twister = function () {
 
     var that = this,
-        twisterd_path = (isWin32 ? appDir + '\\bin\\twisterd' : 'twisterd'),
+        twisterd_path = appDir + ds + 'bin' + ds + 'twisterd',
         twisterd_data_dir = './data/',
-        twisterd_themes_dir = './html/', //appDir + '/html/',
+        twisterd_themes_dir = './html',
         twisterd_args_common = [],
         options = {},
         twisterNodes = [
@@ -31,6 +31,17 @@ window.Twister = function () {
         isStop = false,
         isRestart = false,
         isTwisterdOn = false;
+
+    // load libraries from bin directory
+    if (isMac) {
+        process.env.DYLD_LIBRARY_PATH =
+            (process.env.DYLD_LIBRARY_PATH ? process.env.DYLD_LIBRARY_PATH + ':' : '')
+            + appDir + '/bin';
+    } else if (isLinux) {
+        process.env.LD_LIBRARY_PATH =
+            (process.env.LD_LIBRARY_PATH ? process.env.LD_LIBRARY_PATH + ':' : '')
+            + appDir + '/bin';
+    }
 
     try {
         fs.mkdirSync(appDir + ds + 'data');
@@ -113,7 +124,7 @@ window.Twister = function () {
         childDaemon = rpcCall([
             '-rpcallowip=127.0.0.1',
             '-port=' + options.port,
-            '-htmldir=' + twisterd_themes_dir + settings.theme
+            '-htmldir=' + twisterd_themes_dir
         ], function (error) {
             if (!isTwisterdOn) {
                 var event = new CustomEvent('twisterfail');
