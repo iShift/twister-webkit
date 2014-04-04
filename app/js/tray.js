@@ -148,10 +148,10 @@ window.addEventListener('init', function () {
         skipMinimizeToTray = false;
     });
 
+    var bNewMessages = false;
     observer = new WebKitMutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
-            var title = mutation.target.textContent,
-                bNewMessages;
+            var title = mutation.target.textContent;
             if (mutation.target.parentNode.tagName === 'TITLE') {
                 win.title = title;
                 tray.tooltip = title;
@@ -174,6 +174,8 @@ window.addEventListener('init', function () {
     });
 
     addEventListener('updateIframe', function () {
+        bNewMessages = false;
+
         var iframedoc = window.getIframeDocument();
 
         /**
@@ -195,6 +197,23 @@ window.addEventListener('init', function () {
                 characterData: true,
                 childList: true
             });
+        }
+    });
+
+
+    // Red icon and restart if twisterd doesn't respond
+    var failcounter = 0;
+    addEventListener('twisterrun', function () {
+        failcounter = 0;
+        tray.icon = 'logo/twister_' + (bNewMessages ? 'alticon16' : (isMac ? 'icon16_mac' : 'icon16')) + '.png';
+    });
+    addEventListener('twisterdie', function () {
+        if(failcounter === 0){
+            tray.icon = 'logo/twister_redicon16.png';
+        }
+        failcounter++;
+        if (failcounter >= 5) {
+            twister.tryStart();
         }
     });
 

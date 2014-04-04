@@ -91,7 +91,9 @@ window.Twister = function () {
      */
     this.start = function (callback) {
         if (childDaemon) {
-            callback();
+            if (callback) {
+                callback();
+            }
             return;
         }
 
@@ -273,4 +275,9 @@ window.Twister = function () {
         req.send();
     };
 
+    setInterval(function () {
+        that.isWorking(function (isWorking) {
+            window.dispatchEvent(new CustomEvent(isWorking ? 'twisterrun' : 'twisterdie'));
+        });
+    }, 3000);
 };
