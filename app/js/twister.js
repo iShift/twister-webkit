@@ -62,7 +62,7 @@ window.Twister = function () {
             env: process.env
         });
 
-        child.stdin.end();
+        child.stdin.destroy();
 
         var stderr = '';
         child.stderr.addListener('data', function (chunk) {
@@ -175,7 +175,6 @@ window.Twister = function () {
         isStop = true;
         rpcCall(['stop'], function () {
             setTimeout(function () {
-                isStop = false;
                 if (childDaemon) {
                     try {
                         childDaemon.kill();
@@ -183,6 +182,7 @@ window.Twister = function () {
                     }
                 }
                 childDaemon = null;
+                isStop = false;
                 if (callback) {
                     callback();
                 }
@@ -295,7 +295,7 @@ window.Twister = function () {
 
     /**
      * Check that twister is executed
-     * @param {function} callback
+     * @return {bool}
      */
     function isRunning() {
         var running = false;
