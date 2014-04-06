@@ -11,8 +11,8 @@
 window.Twister = function () {
 
     var that = this,
-        twisterd_path = appDir + ds + 'bin' + ds + 'twisterd',
-        twisterd_data_dir = './data/',
+        twisterd_path = settings.twisterdPath || appDir + ds + 'bin' + ds + 'twisterd',
+        twisterd_data_dir = settings.twisterdDatadir || './data/',
         twisterd_themes_dir = './html',
         twisterd_args_common = [],
         options = {},
@@ -70,19 +70,23 @@ window.Twister = function () {
         });
 
         child.addListener('close', function (code, signal) {
-            if (code === 0 && signal === null) {
-                callback(null);
-            } else {
-                var e = new Error(stderr.trim() || 'Command failed');
-                e.killed = child.killed;
-                e.code = code;
-                e.signal = signal;
-                callback(e);
+            if (callback) {
+                if (code === 0 && signal === null) {
+                    callback(null);
+                } else {
+                    var e = new Error(stderr.trim() || 'Command failed');
+                    e.killed = child.killed;
+                    e.code = code;
+                    e.signal = signal;
+                    callback(e);
+                }
             }
         });
 
         child.addListener('error', function (e) {
-            callback(e);
+            if (callback) {
+                callback(e);
+            }
         });
 
         return child;
@@ -153,6 +157,7 @@ window.Twister = function () {
             } else {
                 waitTwisterStart(callback);
             }
+            setInterval(checkRunning, 1000);
         });
     };
 
@@ -169,16 +174,19 @@ window.Twister = function () {
 
         isStop = true;
         rpcCall(['stop'], function () {
-            isStop = false;
-            if (childDaemon) {
-                childDaemon.kill();
-            }
-            waitTwisterStop(function () {
+            setTimeout(function () {
+                isStop = false;
+                if (childDaemon) {
+                    try {
+                        childDaemon.kill();
+                    } catch (e) {
+                    }
+                }
                 childDaemon = null;
                 if (callback) {
                     callback();
                 }
-            });
+            }, 1000);
         });
     };
 
@@ -256,22 +264,21 @@ window.Twister = function () {
      */
     function waitTwisterStop(callback) {
         setTimeout(function () {
-            that.isWorking(function (isWorking) {
-                if (isWorking) {
-                    waitTwisterStop(callback);
-                } else {
-                    win.setWaitCursor(false);
-                    if (callback) {
-                        callback();
-                    }
+            var isWorking = isRunning();
+            if (isWorking) {
+                waitTwisterStop(callback);
+            } else {
+                win.setWaitCursor(false);
+                if (callback) {
+                    callback();
                 }
-            });
+            }
         }, waitCheckInterval);
     }
 
     /**
      * Check that twister is executed
-     * @param {function} [callback]
+     * @param {function} callback
      */
     this.isWorking = function (callback) {
         var req = new XMLHttpRequest();
@@ -286,9 +293,28 @@ window.Twister = function () {
         req.send();
     };
 
-    setInterval(function () {
-        that.isWorking(function (isWorking) {
-            window.dispatchEvent(new CustomEvent(isWorking ? 'twisterrun' : 'twisterdie'));
-        });
-    }, 3000);
+    /**
+     * Check that twister is executed
+     * @param {function} callback
+     */
+    function isRunning() {
+        var running = false;
+        if (childDaemon) {
+            try {
+                childDaemon.kill(0);
+                running = true;
+            } catch (e) {
+            }
+        }
+        return running;
+    }
+
+    /**
+     * Check that twister is running
+     */
+    function checkRunning()
+    {
+        var isWorking = isRunning();
+        window.dispatchEvent(new CustomEvent(isWorking ? 'twisterrun' : 'twisterdie'));
+    }
 };

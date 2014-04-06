@@ -45,7 +45,6 @@ window.Settings = function () {
     function loadSettings() {
         try {
             var input = fs.readFileSync(fileSettings, 'utf8') || '';
-            console.log(input);
             input.split("\n").forEach(function (line) {
                 var delim = line.indexOf('=');
                 if (delim >= 0) {
