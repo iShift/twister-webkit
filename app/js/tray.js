@@ -6,14 +6,18 @@
 
 window.addEventListener('init', function () {
 
-    var tray = new gui.Tray({
-            icon: (isMac ? 'logo/twister_icon16_mac.png' : 'logo/twister_icon16.png')
+    var icon_normal = isMac ? 'logo/twister_icon16_mac.png' : 'logo/twister_icon16.png',
+        icon_new = 'logo/twister_alticon16.png',
+        icon_die = 'logo/twister_redicon16.png',
+        tray = new gui.Tray({
+            icon: icon_normal
         }),
         menuTray = new gui.Menu(),
         skipMinimizeToTray = false,
         reNewMessages = /^\(\d+\)/,
         observer,
-        themeDir = appDir + ds + 'html';
+        themeDir = appDir + ds + 'html',
+        failcounter = 0;
 
     function restoreFromTray() {
         win.show();
@@ -122,9 +126,6 @@ window.addEventListener('init', function () {
                 }
                 settings.theme = theme;
                 win.updateTheme();
-//                win.isBroken = true;
-//                twister.restart(win.onTwisterStart);
-//                win.reloadFrame();
             }
         }));
     });
@@ -153,12 +154,13 @@ window.addEventListener('init', function () {
     var bNewMessages = false;
     observer = new WebKitMutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
+            failcounter = 0;
             var title = mutation.target.textContent;
             if (mutation.target.parentNode.tagName === 'TITLE') {
                 win.title = title;
                 tray.tooltip = title;
                 bNewMessages = reNewMessages.test(title);
-                tray.icon = 'logo/twister_' + (bNewMessages ? 'alticon16' : (isMac ? 'icon16_mac' : 'icon16')) + '.png';
+                tray.icon = bNewMessages ? icon_new : icon_normal;
             } else {
                 bNewMessages = (title !== '');
             }
@@ -204,17 +206,16 @@ window.addEventListener('init', function () {
 
 
     // Red icon and restart if twisterd doesn't respond
-    var failcounter = 0;
     addEventListener('twisterrun', function () {
         failcounter = 0;
-        tray.icon = 'logo/twister_' + (bNewMessages ? 'alticon16' : (isMac ? 'icon16_mac' : 'icon16')) + '.png';
+        tray.icon = bNewMessages ? icon_new : icon_normal;
     });
     addEventListener('twisterdie', function () {
-        if(failcounter === 0){
-            tray.icon = 'logo/twister_redicon16.png';
+        if (failcounter === 0) {
+            tray.icon = icon_die;
         }
         failcounter++;
-        if (failcounter >= 5) {
+        if (failcounter >= 5) { // restart after 5 seconds
             twister.tryStart();
         }
     });
