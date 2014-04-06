@@ -18,13 +18,15 @@
  * @property rpcPort
  * @property rpcUser
  * @property rpcPassword
+ * @property twisterdPath
+ * @property twisterdDatadir
  */
 window.Settings = function () {
     var that = this;
 
     // default values
     var data = {
-        minimizeToTray: true,
+        minimizeToTray: false,
         requestAttention: true,
         alwaysOnTop: false,
         runMinimized: false,
@@ -33,16 +35,57 @@ window.Settings = function () {
         rpcHost: '127.0.0.1',
         rpcPort: 28332,
         rpcUser: 'user',
-        rpcPassword: 'pwd'
+        rpcPassword: 'pwd',
+        twisterdPath: '',
+        twisterdDatadir: ''
     };
 
-    // load from localStorage
+    var fileSettings = appDir + ds + 'settings.ini';
+
+    function loadSettings() {
+        try {
+            var input = fs.readFileSync(fileSettings, 'utf8') || '';
+            console.log(input);
+            input.split("\n").forEach(function (line) {
+                var delim = line.indexOf('=');
+                if (delim >= 0) {
+                    var key = line.substr(0, delim).trim();
+                    if (data.hasOwnProperty(key)) {
+                        try {
+                            var value = line.substr(delim + 1).trim();
+                            value = JSON.parse(value);
+                            if (value !== null) {
+                                data[key] = value;
+                            }
+                        } catch (e) {
+                        }
+                    }
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    function saveSettings() {
+        var eol = isWin32 ? "\r\n" : "\n",
+            output = '';
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                output += key + '=' + JSON.stringify(data[key]) + eol;
+            }
+        }
+        try {
+            fs.writeFileSync(fileSettings, output);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    loadSettings();
+
     for (var key in data) {
         if (data.hasOwnProperty(key)) {
-            var item = localStorage.getItem(key);
-            if (item !== null) {
-                data[key] = JSON.parse(item);
-            }
             (function (key) {
                 Object.defineProperty(that, key, {
                     get: function () {
@@ -50,7 +93,7 @@ window.Settings = function () {
                     },
                     set: function (value) {
                         data[key] = value;
-                        window.localStorage.setItem(key, JSON.stringify(value));
+                        saveSettings();
                     },
                     enumerable: true,
                     configurable: true
