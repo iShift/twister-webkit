@@ -60,6 +60,7 @@
      * Stop Twister daemon on app close
      */
     win.on('close', function () {
+        win.hide();
         twister.stop(function () {
             win.close(true);
         });
