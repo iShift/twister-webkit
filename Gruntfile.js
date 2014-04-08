@@ -84,6 +84,17 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            osx_libs: {
+                files: [
+                    {
+                        cwd: 'build/download/osx_bin/bin',
+                        src: ['**'],
+                        dest: 'build/releases/twister/mac/twister.app/Contents/Resources/bin/',
+                        mode: 777, // =c777
+                        expand: true
+                    }
+                    ]
+            },        
             nsis: {
                 files: [
                     {
@@ -239,6 +250,10 @@ module.exports = function (grunt) {
             twister_win_ia32: {
                 src: 'http://twister.net.co/wp-content/uploads/<%= twister_win32_bundle %>.zip',
                 dest: 'build/download/<%= twister_win32_bundle %>.zip'
+            },
+            twister_osx_libs: {
+            	src: 'http://twisterd.net/osx_bin.zip',
+                dest: 'build/download/osx_bin.zip'
             }
         },
         unzip: {
@@ -253,6 +268,10 @@ module.exports = function (grunt) {
             twister_win_ia32: {
                 src: 'build/download/<%= twister_win32_bundle %>.zip',
                 dest: 'build/<%= twister_win32_bundle %>'
+            },
+            twister_osx_libs: {
+                src: 'build/download/osx_bin.zip',
+                dest: 'build/download/osx_bin'
             }
         },
         exec: {
@@ -277,8 +296,11 @@ module.exports = function (grunt) {
         'copy:app',
         'nodewebkit',
         'wget:twister_themes',
+        'wget:twister_osx_libs',
         'unzip:twister_default',
         'unzip:twister_calm',
+        'unzip:twister_osx_libs',
+        'copy:osx_libs',
         'copy:theme_default',
         'copy:theme_calm',
         'compress'

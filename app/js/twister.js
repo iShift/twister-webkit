@@ -32,6 +32,13 @@ window.Twister = function () {
         isRestart = false,
         isTwisterdOn = false;
 
+    if (isWin32 || isMac) {
+        twisterd_path = appDir + ds + 'bin' + ds +'twisterd';
+    }
+    if (isMac) {
+        process.env.DYLD_LIBRARY_PATH = (process.env.DYLD_LIBRARY_PATH ? process.env.DYLD_LIBRARY_PATH + ':' : '') + appDir + '/bin';
+    }
+
     try {
         fs.mkdirSync(appDir + ds + 'data');
     } catch (e) {
