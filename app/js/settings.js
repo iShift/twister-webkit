@@ -92,7 +92,7 @@ window.Settings = function () {
                         return data[key];
                     },
                     set: function (value) {
-                        if(data[key] !== value){
+                        if (data[key] !== value) {
                             data[key] = value;
                             saveSettings();
                         }

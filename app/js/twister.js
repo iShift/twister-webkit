@@ -10,17 +10,15 @@
  */
 window.Twister = function () {
 
-    function getDefaultDataDir()
-    {
-        if (isMac){
+    function getDefaultDataDir() {
+        if (isMac) {
             return process.env.HOME + '/Library/Application Support/Twister';
         } else {
             return process.env.HOME + '/.twister';
         }
     }
 
-    function cygwinPath(path)
-    {
+    function cygwinPath(path) {
         if (isWin32) {
             path = path.split(':');
             if (path[1]) {
@@ -32,19 +30,19 @@ window.Twister = function () {
         return path;
     }
 
-    function copyRecursiveSync (src, dest) {
+    function copyRecursiveSync(src, dest) {
         var exists = fs.existsSync(src),
             stats = exists && fs.statSync(src),
             isDirectory = exists && stats.isDirectory();
         if (isDirectory) {
             try {
                 fs.mkdirSync(dest);
-            } catch(e) {
+            } catch (e) {
                 console.log(e);
             }
-            fs.readdirSync(src).forEach(function(childItemName) {
+            fs.readdirSync(src).forEach(function (childItemName) {
                 copyRecursiveSync(src + ds + childItemName,
-                                  dest + ds + childItemName);
+                    dest + ds + childItemName);
             });
         } else {
             fs.writeFileSync(dest, fs.readFileSync(src));
@@ -90,7 +88,7 @@ window.Twister = function () {
         if (!fs.existsSync(settings.twisterdDatadir + 'twisterwallet.dat')) {
             try {
                 fs.mkdirSync(dirname(settings.twisterdDatadir));
-            } catch(e) {
+            } catch (e) {
                 console.log(e);
             }
             copyRecursiveSync(appDir + ds + 'data', settings.twisterdDatadir);
@@ -357,8 +355,7 @@ window.Twister = function () {
     /**
      * Check that twister is running
      */
-    function checkRunning()
-    {
+    function checkRunning() {
         var isWorking = isRunning();
         window.dispatchEvent(new CustomEvent(isWorking ? 'twisterrun' : 'twisterdie'));
     }
