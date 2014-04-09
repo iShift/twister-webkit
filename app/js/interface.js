@@ -46,13 +46,29 @@
         iframe.onload();
     });
 
-    /**
-     * Exit after click on Abort button
-     */
     window.addEventListener('updateIframe', function () {
+        /**
+         * Exit after click on Abort button
+         */
         var iframedoc = window.getIframeDocument();
         if (iframedoc && iframedoc.location.pathname === '/abort.html') {
             win.close();
+        }
+        /**
+         * Change RPC login/pass
+         */
+        var iframewindow = window.getIframeWindow();
+        if (iframewindow) {
+            win.eval(document.getElementById('twister'),
+                "twisterRpc = function (method, params, resultFunc, resultArg, errorFunc, errorArg) {" +
+                    "var foo = new $.JsonRpcClient({ ajaxUrl: '/', username: '" + settings.rpcUser.replace(/'/g, "\\'") +
+                                                 "', password: '" + settings.rpcPassword.replace(/'/g, "\\'") + "'});" +
+                    "foo.call(method, params," +
+                        "function(ret) { resultFunc(resultArg, ret); }," +
+                        "function(ret) { if(ret != null) errorFunc(errorArg, ret); }" +
+                    ");" +
+                "}"
+            );
         }
     });
 
