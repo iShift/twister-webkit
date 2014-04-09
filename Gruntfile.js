@@ -19,7 +19,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         app: grunt.file.readJSON('app/package.json'),
         twister_win32_bundle: 'twister-0.9.19-win32-bundle',
-        nsis_path: (process.arch === 'x64' ? '%ProgramFiles(x86)%' : '%ProgramFiles%') + '\\NSIS\\',
+        nsis_path: process.platform === 'win32' ? (process.arch === 'x64' ? '%ProgramFiles(x86)%' : '%ProgramFiles%') + '\\NSIS\\' : '',
 
         // Task configuration.
         clean: {
