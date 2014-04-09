@@ -82,6 +82,7 @@ window.Settings = function () {
     }
 
     loadSettings();
+    saveSettings();
 
     for (var key in data) {
         if (data.hasOwnProperty(key)) {
@@ -91,8 +92,10 @@ window.Settings = function () {
                         return data[key];
                     },
                     set: function (value) {
-                        data[key] = value;
-                        saveSettings();
+                        if(data[key] !== value){
+                            data[key] = value;
+                            saveSettings();
+                        }
                     },
                     enumerable: true,
                     configurable: true
