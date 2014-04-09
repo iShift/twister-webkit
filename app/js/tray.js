@@ -16,8 +16,7 @@ window.addEventListener('init', function () {
         skipMinimizeToTray = false,
         reNewMessages = /^\(\d+\)/,
         observer,
-        themeDir = appDir + ds + 'html',
-        failcounter = 0;
+        themeDir = appDir + ds + 'html';
 
     function restoreFromTray() {
         win.show();
@@ -154,7 +153,6 @@ window.addEventListener('init', function () {
     var bNewMessages = false;
     observer = new WebKitMutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
-            failcounter = 0;
             var title = mutation.target.textContent;
             if (mutation.target.parentNode.tagName === 'TITLE') {
                 win.title = title;
@@ -207,17 +205,10 @@ window.addEventListener('init', function () {
 
     // Red icon and restart if twisterd doesn't respond
     addEventListener('twisterrun', function () {
-        failcounter = 0;
         tray.icon = bNewMessages ? icon_new : icon_normal;
     });
     addEventListener('twisterdie', function () {
-        if (failcounter === 0) {
-            tray.icon = icon_die;
-        }
-        failcounter++;
-        if (failcounter >= 5) { // restart after 5 seconds
-            twister.tryStart();
-        }
+        twister.tryStart();
     });
 
 });
