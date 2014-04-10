@@ -143,8 +143,8 @@ window.addEventListener('init', function () {
     tray.menu = menuTray;
 
     win.on('minimize', function () {
+        win.blur();
         if (settings.minimizeToTray && !skipMinimizeToTray) {
-            win.blur();
             win.hide();
         }
         skipMinimizeToTray = false;
