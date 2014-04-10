@@ -10,12 +10,51 @@
  */
 window.Twister = function () {
 
+    function getDefaultDataDir() {
+        if (isMac) {
+            return process.env.HOME + '/Library/Application Support/Twister';
+        } else {
+            return process.env.HOME + '/.twister';
+        }
+    }
+
+    function cygwinPath(path) {
+        if (isWin32) {
+            path = path.split(':');
+            if (path[1]) {
+                path = '/cygdrive/' + path[0].toLowerCase() + path[1].replace(/\\/g, '/');
+            } else {
+                path = path[0].replace(/\\/g, '/')
+            }
+        }
+        return path;
+    }
+
+    function copyRecursiveSync(src, dest) {
+        var exists = fs.existsSync(src),
+            stats = exists && fs.statSync(src),
+            isDirectory = exists && stats.isDirectory();
+        if (isDirectory) {
+            try {
+                fs.mkdirSync(dest);
+            } catch (e) {
+                console.log(e);
+            }
+            fs.readdirSync(src).forEach(function (childItemName) {
+                copyRecursiveSync(src + ds + childItemName,
+                    dest + ds + childItemName);
+            });
+        } else {
+            fs.writeFileSync(dest, fs.readFileSync(src));
+        }
+    }
+
+    settings.twisterdPath = settings.twisterdPath || appDir + ds + 'bin' + ds + 'twisterd';
+    settings.twisterdDatadir = settings.twisterdDatadir || getDefaultDataDir();
+
     var that = this,
-        twisterd_path = (isWin32 ? appDir + '\\bin\\twisterd' : 'twisterd'),
-        twisterd_data_dir = './data/',
-        twisterd_themes_dir = './html/', //appDir + '/html/',
+        twisterd_themes_dir = './html',
         twisterd_args_common = [],
-        options = {},
         twisterNodes = [
             'seed3.twister.net.co',
             'seed2.twister.net.co',
@@ -24,6 +63,7 @@ window.Twister = function () {
         ],
         curNodeIndex = Infinity,
         childDaemon = null,
+        checkRunningId = 0,
         waitCheckInterval = 500,
         addNodeInterval = 1500,
         restartInterval = 1000,
@@ -32,16 +72,29 @@ window.Twister = function () {
         isRestart = false,
         isTwisterdOn = false;
 
-    if (isWin32 || isMac) {
-        twisterd_path = appDir + ds + 'bin' + ds +'twisterd';
-    }
+    // load libraries from bin directory
     if (isMac) {
-        process.env.DYLD_LIBRARY_PATH = (process.env.DYLD_LIBRARY_PATH ? process.env.DYLD_LIBRARY_PATH + ':' : '') + appDir + '/bin';
+        process.env.DYLD_LIBRARY_PATH =
+            (process.env.DYLD_LIBRARY_PATH ? process.env.DYLD_LIBRARY_PATH + ':' : '')
+            + appDir + '/bin';
+    } else if (isLinux) {
+        process.env.LD_LIBRARY_PATH =
+            (process.env.LD_LIBRARY_PATH ? process.env.LD_LIBRARY_PATH + ':' : '')
+            + appDir + '/bin';
     }
 
+// initialize data dir
     try {
-        fs.mkdirSync(appDir + ds + 'data');
+        if (!fs.existsSync(settings.twisterdDatadir + 'twisterwallet.dat')) {
+            try {
+                fs.mkdirSync(dirname(settings.twisterdDatadir));
+            } catch (e) {
+                console.log(e);
+            }
+            copyRecursiveSync(appDir + ds + 'data', settings.twisterdDatadir);
+        }
     } catch (e) {
+        console.log(e);
     }
 
     /**
@@ -53,12 +106,12 @@ window.Twister = function () {
     function rpcCall(args, callback) {
         var twisterd_args = [].concat(twisterd_args_common, args);
 
-        var child = spawn(twisterd_path, twisterd_args, {
+        var child = spawn(settings.twisterdPath, twisterd_args, {
             cwd: appDir,
             env: process.env
         });
 
-        child.stdin.end();
+        child.stdin.destroy();
 
         var stderr = '';
         child.stderr.addListener('data', function (chunk) {
@@ -66,30 +119,26 @@ window.Twister = function () {
         });
 
         child.addListener('close', function (code, signal) {
-            if (code === 0 && signal === null) {
-                callback(null);
-            } else {
-                var e = new Error(stderr.trim() || 'Command failed');
-                e.killed = child.killed;
-                e.code = code;
-                e.signal = signal;
-                callback(e);
+            if (callback) {
+                if (code === 0 && signal === null) {
+                    callback(null);
+                } else {
+                    var e = new Error(stderr.trim() || 'Command failed');
+                    e.killed = child.killed;
+                    e.code = code;
+                    e.signal = signal;
+                    callback(e);
+                }
             }
         });
 
         child.addListener('error', function (e) {
-            callback(e);
+            if (callback) {
+                callback(e);
+            }
         });
 
         return child;
-    }
-
-    function initOptions() {
-        options.port = settings.port || 28333;
-        options.rpcHost = settings.rpcHost || '127.0.0.1';
-        options.rpcPort = settings.rpcPort || 28332;
-        options.rpcUser = settings.rpcUser || 'user';
-        options.rpcPassword = settings.rpcPassword || 'pwd';
     }
 
     /**
@@ -98,18 +147,18 @@ window.Twister = function () {
      */
     this.start = function (callback) {
         if (childDaemon) {
-            callback();
+            if (callback) {
+                callback();
+            }
             return;
         }
 
-        initOptions();
-
         twisterd_args_common = [
-            '-datadir=' + twisterd_data_dir,
-            '-rpcuser=' + options.rpcUser,
-            '-rpcpassword=' + options.rpcPassword,
-            '-rpcconnect=' + options.rpcHost,
-            '-rpcport=' + options.rpcPort
+            "-datadir='" + cygwinPath(settings.twisterdDatadir) + "/'",
+            '-rpcuser=' + settings.rpcUser,
+            '-rpcpassword=' + settings.rpcPassword,
+            '-rpcconnect=' + settings.rpcHost,
+            '-rpcport=' + settings.rpcPort
         ];
 
         win.setWaitCursor(true);
@@ -117,8 +166,8 @@ window.Twister = function () {
 
         childDaemon = rpcCall([
             '-rpcallowip=127.0.0.1',
-            '-port=' + options.port,
-            '-htmldir=' + twisterd_themes_dir + settings.theme
+            '-port=' + settings.port,
+            '-htmldir=' + twisterd_themes_dir
         ], function (error) {
             if (!isTwisterdOn) {
                 var event = new CustomEvent('twisterfail');
@@ -139,7 +188,10 @@ window.Twister = function () {
      * @param {function} [callback]
      */
     this.tryStart = function (callback) {
-        initOptions();
+        if (checkRunningId) {
+            clearInterval();
+            checkRunningId = 0;
+        }
 
         that.isWorking(function (bStarted) {
             if (!bStarted) {
@@ -147,6 +199,8 @@ window.Twister = function () {
             } else {
                 waitTwisterStart(callback);
             }
+            checkRunning();
+            checkRunningId = setInterval(checkRunning, 1000);
         });
     };
 
@@ -163,16 +217,19 @@ window.Twister = function () {
 
         isStop = true;
         rpcCall(['stop'], function () {
-            isStop = false;
-            if (childDaemon) {
-                childDaemon.kill();
-            }
-            waitTwisterStop(function () {
+            setTimeout(function () {
+                if (childDaemon) {
+                    try {
+                        childDaemon.kill();
+                    } catch (e) {
+                    }
+                }
                 childDaemon = null;
+                isStop = false;
                 if (callback) {
                     callback();
                 }
-            });
+            }, 1000);
         });
     };
 
@@ -250,26 +307,25 @@ window.Twister = function () {
      */
     function waitTwisterStop(callback) {
         setTimeout(function () {
-            that.isWorking(function (isWorking) {
-                if (isWorking) {
-                    waitTwisterStop(callback);
-                } else {
-                    win.setWaitCursor(false);
-                    if (callback) {
-                        callback();
-                    }
+            var isWorking = isRunning();
+            if (isWorking) {
+                waitTwisterStop(callback);
+            } else {
+                win.setWaitCursor(false);
+                if (callback) {
+                    callback();
                 }
-            });
+            }
         }, waitCheckInterval);
     }
 
     /**
      * Check that twister is executed
-     * @param {function} [callback]
+     * @param {function} callback
      */
     this.isWorking = function (callback) {
         var req = new XMLHttpRequest();
-        req.open('OPTIONS', 'http://' + options.rpcHost + ':' + options.rpcPort + '/');
+        req.open('OPTIONS', 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/');
         req.timeout = rpcCheckTimeout;
         req.onreadystatechange = function () {
             if (req.readyState === 4) {
@@ -280,4 +336,30 @@ window.Twister = function () {
         req.send();
     };
 
+    /**
+     * Check that twister is executed
+     * @return {bool}
+     */
+    function isRunning() {
+        var running = false;
+        if (childDaemon) {
+            try {
+                childDaemon.kill(0);
+                running = true;
+            } catch (e) {
+            }
+        }
+        return running;
+    }
+
+    /**
+     * Check that twister is running
+     */
+    function checkRunning() {
+        if (isStop || isRestart || !isTwisterdOn) {
+            return;
+        }
+        var isWorking = isRunning();
+        window.dispatchEvent(new CustomEvent(isWorking ? 'twisterrun' : 'twisterdie'));
+    }
 };

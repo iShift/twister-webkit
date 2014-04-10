@@ -6,8 +6,11 @@
 
 window.addEventListener('init', function () {
 
-    var tray = new gui.Tray({
-            icon: (isMac ? 'logo/twister_icon16_mac.png' : 'logo/twister_icon16.png')
+    var icon_normal = isMac ? 'logo/twister_icon16_mac.png' : 'logo/twister_icon16.png',
+        icon_new = 'logo/twister_alticon16.png',
+        icon_die = 'logo/twister_redicon16.png',
+        tray = new gui.Tray({
+            icon: icon_normal
         }),
         menuTray = new gui.Menu(),
         skipMinimizeToTray = false,
@@ -121,8 +124,7 @@ window.addEventListener('init', function () {
                     }
                 }
                 settings.theme = theme;
-                win.isBroken = true;
-                twister.restart(win.onTwisterStart);
+                win.updateTheme();
             }
         }));
     });
@@ -141,22 +143,22 @@ window.addEventListener('init', function () {
     tray.menu = menuTray;
 
     win.on('minimize', function () {
+        win.blur();
         if (settings.minimizeToTray && !skipMinimizeToTray) {
-            win.blur();
             win.hide();
         }
         skipMinimizeToTray = false;
     });
 
+    var bNewMessages = false;
     observer = new WebKitMutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
-            var title = mutation.target.textContent,
-                bNewMessages;
+            var title = mutation.target.textContent;
             if (mutation.target.parentNode.tagName === 'TITLE') {
                 win.title = title;
                 tray.tooltip = title;
                 bNewMessages = reNewMessages.test(title);
-                tray.icon = 'logo/twister_' + (bNewMessages ? 'alticon16' : (isMac ? 'icon16_mac' : 'icon16')) + '.png';
+                tray.icon = bNewMessages ? icon_new : icon_normal;
             } else {
                 bNewMessages = (title !== '');
             }
@@ -174,6 +176,8 @@ window.addEventListener('init', function () {
     });
 
     addEventListener('updateIframe', function () {
+        bNewMessages = false;
+
         var iframedoc = window.getIframeDocument();
 
         /**
@@ -196,6 +200,15 @@ window.addEventListener('init', function () {
                 childList: true
             });
         }
+    });
+
+
+    // Red icon and restart if twisterd doesn't respond
+    addEventListener('twisterrun', function () {
+        tray.icon = bNewMessages ? icon_new : icon_normal;
+    });
+    addEventListener('twisterdie', function () {
+        twister.tryStart();
     });
 
 });

@@ -13,6 +13,7 @@ var gui = require('nw.gui'),
 
     isWin32 = (process.platform === 'win32'),
     isMac   = (process.platform === 'darwin'),
+    isLinux = (process.platform === 'linux'),
     ds = (isWin32 ? '\\' : '/'),
 
     appDir = (

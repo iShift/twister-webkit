@@ -25,6 +25,7 @@ printbold "Twister - p2p microbloging system - daemon installer"
 
 printbold "Installing dependencies..."
 
+sudo apt-get update
 sudo apt-get install autoconf build-essential git libboost-all-dev libdb++-dev libminiupnpc-dev libssl-dev libtool
 
 
@@ -37,7 +38,7 @@ cd twister-core
 printbold "Configuring twister-daemon..."
 
 ./autotool.sh
-./configure --enable-logging
+./configure --enable-logging --enable-debug=no
 
 
 printbold "Building twister daemon..."

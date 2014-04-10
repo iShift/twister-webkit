@@ -56,7 +56,7 @@ cd twister-core
 printbold "Configuring twister-daemon..."
 
 ./autotool.sh
-./configure --enable-logging --with-openssl=/usr/local/opt/openssl --with-libdb=/usr/local/opt/berkeley-db4
+./configure --enable-logging --enable-debug=no --with-openssl=/usr/local/opt/openssl --with-libdb=/usr/local/opt/berkeley-db4
 
 
 printbold "Building twister daemon..."
