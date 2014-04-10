@@ -85,7 +85,7 @@ window.Twister = function () {
 
 // initialize data dir
     try {
-        if (!fs.existsSync(settings.twisterdDatadir + 'twisterwallet.dat')) {
+        if (!fs.existsSync(settings.twisterdDatadir + '/twisterwallet.dat')) {
             try {
                 fs.mkdirSync(dirname(settings.twisterdDatadir));
             } catch (e) {
