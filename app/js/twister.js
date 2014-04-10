@@ -356,6 +356,9 @@ window.Twister = function () {
      * Check that twister is running
      */
     function checkRunning() {
+        if (isStop || isRestart || !isTwisterdOn) {
+            return;
+        }
         var isWorking = isRunning();
         window.dispatchEvent(new CustomEvent(isWorking ? 'twisterrun' : 'twisterdie'));
     }
