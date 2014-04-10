@@ -14,7 +14,7 @@ window.Twister = function () {
         if (isMac) {
             return process.env.HOME + '/Library/Application Support/Twister';
         } else {
-            return process.env.HOME + '/.twister';
+            return process.env.HOME + ds + '.twister';
         }
     }
 
