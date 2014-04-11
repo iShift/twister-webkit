@@ -77,6 +77,7 @@
      */
     win.on('close', function () {
         win.hide();
+        win.displayLoader();
         twister.stop(function () {
             win.close(true);
         });
@@ -108,8 +109,18 @@
         window.getIframeWindow().location.reload();
     };
 
+    /**
+     * Load theme
+     */
     win.updateTheme = function () {
         window.getIframeDocument().location = 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/' + settings.theme + '/home.html';
+    };
+
+    /**
+     * Display loader
+     */
+    win.displayLoader = function () {
+        window.getIframeDocument().location = 'loader.html';
     };
 
     /**
