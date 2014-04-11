@@ -18,7 +18,7 @@ window.Twister = function () {
         }
     }
 
-    function cygwinPath(path) {
+    function escapePath(path) {
         if (isWin32) {
             path = path.split(':');
             if (path[1]) {
@@ -26,6 +26,8 @@ window.Twister = function () {
             } else {
                 path = path[0].replace(/\\/g, '/')
             }
+        } else {
+            path = path.replace(/ /g, '\\ ');
         }
         return path;
     }
@@ -85,7 +87,7 @@ window.Twister = function () {
 
 // initialize data dir
     try {
-        if (!fs.existsSync(settings.twisterdDatadir + '/twisterwallet.dat')) {
+        if (!fs.existsSync(settings.twisterdDatadir + ds + 'twisterwallet.dat')) {
             try {
                 fs.mkdirSync(dirname(settings.twisterdDatadir));
             } catch (e) {
@@ -154,7 +156,7 @@ window.Twister = function () {
         }
 
         twisterd_args_common = [
-            "-datadir='" + cygwinPath(settings.twisterdDatadir) + "/'",
+            '-datadir=' + escapePath(settings.twisterdDatadir + '/'),
             '-rpcuser=' + settings.rpcUser,
             '-rpcpassword=' + settings.rpcPassword,
             '-rpcconnect=' + settings.rpcHost,
@@ -167,7 +169,7 @@ window.Twister = function () {
         childDaemon = rpcCall([
             '-rpcallowip=127.0.0.1',
             '-port=' + settings.port,
-            '-htmldir=' + twisterd_themes_dir
+            '-htmldir=' + escapePath(twisterd_themes_dir)
         ], function (error) {
             if (!isTwisterdOn) {
                 var event = new CustomEvent('twisterfail');
@@ -276,7 +278,6 @@ window.Twister = function () {
     }
 
     // @todo: transform Twister into real class with proto
-    // @todo: use setTimeout/setInterval to check RPC status each 2 seconds and assign red icon to window and tray
 
     /**
      * Run callback after Twister is started
