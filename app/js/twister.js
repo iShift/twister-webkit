@@ -12,7 +12,7 @@ window.Twister = function () {
 
     function getDefaultDataDir() {
         if (isMac) {
-            return process.env.HOME + '/Library/Application Support/Twister';
+            return process.env.HOME + '/.twister';
         } else {
             return process.env.HOME + ds + '.twister';
         }
