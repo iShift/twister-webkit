@@ -98,6 +98,7 @@ window.addEventListener('init', function () {
             label: __('Restart'),
             click: function () {
                 win.isBroken = true;
+                win.displayLoader();
                 twister.restart(win.onTwisterStart);
             }
         }),
