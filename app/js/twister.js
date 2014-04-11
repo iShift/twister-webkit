@@ -171,6 +171,11 @@ window.Twister = function () {
             '-port=' + settings.port,
             '-htmldir=' + escapePath(twisterd_themes_dir)
         ], function (error) {
+            if (error && error.killed === true) {
+                win.emit('twisterstop');
+                childDaemon = null;
+                return;
+            }
             if (!isTwisterdOn) {
                 var event = new CustomEvent('twisterfail');
                 event.error = {
@@ -218,7 +223,19 @@ window.Twister = function () {
         win.setWaitCursor(true);
 
         isStop = true;
+
+        win.addListener('twisterstop', function () {
+            childDaemon = null;
+            isStop = false;
+            if (callback) {
+                callback();
+            }
+        });
+
         rpcCall(['stop'], function () {
+            if (childDaemon) {
+                childDaemon.unref();
+            }
             setTimeout(function () {
                 if (childDaemon) {
                     try {
@@ -226,12 +243,7 @@ window.Twister = function () {
                     } catch (e) {
                     }
                 }
-                childDaemon = null;
-                isStop = false;
-                if (callback) {
-                    callback();
-                }
-            }, 1000);
+            }, 5*60*1000);
         });
     };
 
