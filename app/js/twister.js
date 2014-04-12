@@ -51,8 +51,14 @@ window.Twister = function () {
         }
     }
 
+    function getRandomPassword() {
+        var k = 2; // number of 24bit randoms
+        return require('crypto').randomBytes(3 * k).toString('base64');
+    }
+
     settings.twisterdPath = settings.twisterdPath || appDir + ds + 'bin' + ds + 'twisterd';
     settings.twisterdDatadir = settings.twisterdDatadir || getDefaultDataDir();
+    settings.rpcPassword = settings.rpcPassword || getRandomPassword();
 
     var that = this,
         twisterd_themes_dir = './html',
