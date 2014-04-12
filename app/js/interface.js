@@ -83,13 +83,6 @@
     });
 
     /**
-     * Cancel all new windows (Middle clicks / New Tab)
-     */
-    win.on('new-win-policy', function (frame, url, policy) {
-        policy.ignore();
-    });
-
-    /**
      * Disable drag&drop to window
      */
     function preventDefault(e) {
