@@ -232,14 +232,16 @@ window.Twister = function () {
 
         win.addListener('twisterstop', function () {
             childDaemon = null;
-            isStop = false;
             if (callback) {
                 callback();
             }
+            win.removeAllListeners('twisterstop');
         });
 
         rpcCall(['stop'], function () {
             if (childDaemon) {
+                childDaemon.stdout.destroy();
+                childDaemon.stderr.destroy();
                 childDaemon.unref();
             }
             setTimeout(function () {
@@ -249,7 +251,7 @@ window.Twister = function () {
                     } catch (e) {
                     }
                 }
-            }, 5*60*1000);
+            }, 5*1000);
         });
     };
 
@@ -263,6 +265,7 @@ window.Twister = function () {
         }
         isRestart = true;
         that.stop(function () {
+            isStop = false;
             setTimeout(function () {
                 that.start(callback);
                 isRestart = false;
