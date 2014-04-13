@@ -35,31 +35,20 @@
         return iframe ? iframe.contentWindow.document : null;
     };
 
-    /**
-     * Trigger updateIframe event after change iframe URL
-     */
-    win.on('loaded', function () {
+    win.on('document-start', function () {
+        /**
+         * Trigger updateIframe event after change iframe URL
+         */
         var iframe = document.getElementById('twister');
         iframe.onload = function () {
             window.dispatchEvent(new CustomEvent('updateIframe'));
         };
         iframe.onload();
-    });
-
-    window.addEventListener('updateIframe', function () {
-        /**
-         * Exit after click on Abort button
-         */
-        var iframedoc = window.getIframeDocument();
-        if (iframedoc && iframedoc.location.pathname === '/abort.html') {
-            win.close();
-        }
         /**
          * Change RPC login/pass
          */
-        var iframewindow = window.getIframeWindow();
-        if (iframewindow) {
-            win.eval(document.getElementById('twister'),
+        window.getIframeDocument().addEventListener('DOMContentLoaded', function() {
+            win.eval(iframe,
                 "twisterRpc = function (method, params, resultFunc, resultArg, errorFunc, errorArg) {" +
                     "var foo = new $.JsonRpcClient({ ajaxUrl: '/', username: '" + settings.rpcUser.replace(/'/g, "\\'") +
                                                  "', password: '" + settings.rpcPassword.replace(/'/g, "\\'") + "'});" +
@@ -69,6 +58,16 @@
                     ");" +
                 "}"
             );
+        });
+    });
+
+    /**
+     * Exit after click on Abort button
+     */
+    window.addEventListener('updateIframe', function () {
+        var iframedoc = window.getIframeDocument();
+        if (iframedoc && iframedoc.location.pathname === '/abort.html') {
+            win.close();
         }
     });
 
@@ -81,13 +80,6 @@
         twister.stop(function () {
             win.close(true);
         });
-    });
-
-    /**
-     * Cancel all new windows (Middle clicks / New Tab)
-     */
-    win.on('new-win-policy', function (frame, url, policy) {
-        policy.ignore();
     });
 
     /**

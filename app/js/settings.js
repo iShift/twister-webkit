@@ -35,7 +35,7 @@ window.Settings = function () {
         rpcHost: '127.0.0.1',
         rpcPort: 28332,
         rpcUser: 'user',
-        rpcPassword: 'pwd',
+        rpcPassword: '',
         twisterdPath: '',
         twisterdDatadir: ''
     };
