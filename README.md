@@ -57,5 +57,4 @@ Build On OS X
 With this command you can complitly build twister with last libs and all blockchain.
 
     `grunt osx`
-
     `grunt`
