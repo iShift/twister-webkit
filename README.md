@@ -55,5 +55,7 @@ to download prebuilt version of Twister core for Windows and generate all-in-one
 Build On OS X
 ===========================
 With this command you can complitly build twister with last libs and all blockchain.
+
     `grunt osx`
+
     `grunt`
