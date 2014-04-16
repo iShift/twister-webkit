@@ -347,11 +347,11 @@ window.Twister = function () {
      */
     this.isWorking = function (callback) {
         var req = new XMLHttpRequest();
-        req.open('OPTIONS', 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/');
+        req.open('POST', 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/');
         req.timeout = rpcCheckTimeout;
         req.onreadystatechange = function () {
             if (req.readyState === 4) {
-                var status = (req.status === 200);
+                var status = (req.status === 401); // HTTP_UNAUTHORIZED
                 callback(status);
             }
         };
