@@ -251,7 +251,7 @@ module.exports = function (grunt) {
                     overwrite: true
                 },
                 files: {
-                    'build/download/twister-theme-default.zip': 'https://github.com/miguelfreitas/twister-html/archive/master.zip',
+                    'build/download/twister-theme-default.zip': 'http://twisterd.net/twister-html-master.zip',
                     'build/download/twister-theme-calm.zip': 'https://codeload.github.com/iHedgehog/twister-calm/zip/master'
                 }
             },
