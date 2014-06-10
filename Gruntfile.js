@@ -251,7 +251,7 @@ module.exports = function (grunt) {
                     overwrite: true
                 },
                 files: {
-                    'build/download/twister-theme-default.zip': 'https://codeload.github.com/miguelfreitas/twister-html/zip/master',
+                    'build/download/twister-theme-default.zip': 'https://github.com/miguelfreitas/twister-html/archive/master.zip',
                     'build/download/twister-theme-calm.zip': 'https://codeload.github.com/iHedgehog/twister-calm/zip/master'
                 }
             },
@@ -262,6 +262,10 @@ module.exports = function (grunt) {
             twister_osx_libs: {
             	src: 'http://twisterd.net/osx_bin.zip',
                 dest: 'build/download/osx_bin.zip'
+            },
+            twister_win_libs: {
+            	src: 'http://twisterd.net/twister_0.9.21_bin_win32.zip',
+                dest: 'build/download/win_bin.zip'
             }
         },
         unzip: {
@@ -305,6 +309,7 @@ module.exports = function (grunt) {
         'nodewebkit',
         'wget:twister_themes',
         'wget:twister_osx_libs',
+        'wget:twister_win_libs',
         'unzip:twister_default',
         'unzip:twister_calm',
         'unzip:twister_osx_libs',
