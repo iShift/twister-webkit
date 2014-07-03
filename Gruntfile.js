@@ -274,10 +274,6 @@ module.exports = function (grunt) {
                 src: '<%= twister_mac_x64_url %>',
                 dest: 'build/download/twister-osx-bundle.zip'
             },
-            twister_win_libs: {
-            	src: 'http://twisterd.net/twister_0.9.21_bin_win32.zip',
-                dest: 'build/download/win_bin.zip'
-            }
         },
         unzip: {
             twister_default: {
@@ -324,7 +320,6 @@ module.exports = function (grunt) {
         'curl:twister_theme_calm',
         'curl:twister_win_ia32',
         'curl:twister_osx_x64',
-        'wget:twister_win_libs',
         'unzip:twister_default',
         'unzip:twister_calm',
         'unzip:twister_win_ia32',
