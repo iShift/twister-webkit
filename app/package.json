@@ -1,8 +1,9 @@
 {
     "main": "index.html",
     "name": "twister",
-    "version": "0.9.19.16",
+    "version": "0.9.22.0",
     "description": "P2P microbloging system",
+    "chromium-args": "--auth-schemes='basic'",
     "window": {
         "title": "Twister",
         "toolbar": false,
@@ -14,8 +15,8 @@
         {
             "name": "Shift",
             "email": "shift.rus@gmail.com",
-            "web": "http://jawerty.github.io",
-            "feedback": "https://github.com/iShift/twister-webkit"
+            "web": "https://github.com/iShift/twister-webkit",
+            "feedback": "https://github.com/iShift/twister-webkit/issues"
         }
     ],
     "licenses": [

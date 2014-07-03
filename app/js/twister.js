@@ -172,11 +172,16 @@ window.Twister = function () {
         win.setWaitCursor(true);
         isTwisterdOn = false; // will be set to true in waitTwisterStart
 
-        childDaemon = rpcCall([
+        var twisterd_args_daemon = [
             '-rpcallowip=127.0.0.1',
             '-port=' + settings.port,
             '-htmldir=' + escapePath(twisterd_themes_dir)
-        ], function (error) {
+        ];
+        if (settings.proxy) {
+            twisterd_args_daemon.push('-proxy=' + settings.proxy);
+        }
+
+        childDaemon = rpcCall(twisterd_args_daemon, function (error) {
             if (error && error.killed === true) {
                 win.emit('twisterstop');
                 childDaemon = null;
@@ -347,11 +352,13 @@ window.Twister = function () {
      */
     this.isWorking = function (callback) {
         var req = new XMLHttpRequest();
-        req.open('POST', 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/');
+        req.open('GET', 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/empty.html');
         req.timeout = rpcCheckTimeout;
+        req.withCredentials = true;
+        req.setRequestHeader('Authorization', 'Basic ' + btoa(settings.rpcUser + ':' + settings.rpcPassword));
         req.onreadystatechange = function () {
             if (req.readyState === 4) {
-                var status = (req.status === 401); // HTTP_UNAUTHORIZED
+                var status = (req.status === 200); // HTTP_UNAUTHORIZED
                 callback(status);
             }
         };

@@ -20,6 +20,7 @@
  * @property rpcPassword
  * @property twisterdPath
  * @property twisterdDatadir
+ * @property proxy
  */
 window.Settings = function () {
     var that = this;
@@ -37,7 +38,8 @@ window.Settings = function () {
         rpcUser: 'user',
         rpcPassword: '',
         twisterdPath: '',
-        twisterdDatadir: ''
+        twisterdDatadir: '',
+        proxy: ''
     };
 
     var fileSettings = appDir + ds + 'settings.ini';
