@@ -51,3 +51,4 @@ Download and setup NSIS (Nullsoft Scriptable Install System) 2.46: http://nsis.s
 
 to download prebuilt version of Twister core for Windows and generate all-in-one setup executable file in
 `build-win/Twister-[ver].exe`.
+

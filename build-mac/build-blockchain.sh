@@ -38,7 +38,7 @@ BLOCKS="-1"
 while : ; do
   sleep 10
   PREV_BLOCKS=$BLOCKS
-  BLOCKS=$(twisterd -datadir=./data/ -rpcuser=user -rpcpassword=pwd getinfo | grep -Po '(?<="blocks" : )\d+')
+  BLOCKS=$(twisterd getinfo | grep blocks)
   echo $BLOCKS
   [[ -z $BLOCKS || $BLOCKS != $PREV_BLOCKS ]] || break
 done
