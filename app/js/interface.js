@@ -105,7 +105,11 @@
      * Load theme
      */
     win.updateTheme = function () {
-        window.getIframeDocument().location = 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/' + settings.theme + '/home.html';
+        window.getIframeDocument().location =
+            'http://' +
+            settings.rpcUser + ':' + settings.rpcPassword + '@' +
+            settings.rpcHost + ':' + settings.rpcPort +
+            '/' + settings.theme + '/home.html';
     };
 
     /**
