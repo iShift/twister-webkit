@@ -352,7 +352,7 @@ window.Twister = function () {
      */
     this.isWorking = function (callback) {
         var req = new XMLHttpRequest();
-        req.open('GET', 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/empty.html');
+        req.open('POST', 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/empty.html');
         req.timeout = rpcCheckTimeout;
         req.withCredentials = true;
         req.setRequestHeader('Authorization', 'Basic ' + btoa(settings.rpcUser + ':' + settings.rpcPassword));
