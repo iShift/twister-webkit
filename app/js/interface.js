@@ -136,7 +136,7 @@
      */
     win.setWaitCursor = function (wait) {
         var doc = window.getIframeDocument();
-        if (doc) {
+        if (doc && doc.body) {
             doc.body.style.cursor = wait ? 'progress' : '';
         }
     };
