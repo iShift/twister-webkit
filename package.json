@@ -24,13 +24,13 @@
     "dependencies": {},
     "devDependencies": {
         "grunt-cli": "~0.1.13",
-        "grunt": "~0.4.3",
-        "grunt-contrib-clean": "~0.5.0",
+        "grunt": "~0.4.5",
+        "grunt-contrib-clean": "~0.6.0",
         "grunt-contrib-compress": "https://github.com/dryabov/grunt-contrib-compress/tarball/39ad2e2a5af4531ef39ebd31bef7ceb05241336c",
         "grunt-contrib-copy": "~0.5.0",
-        "grunt-exec": "~0.4.5",
-        "grunt-node-webkit-builder": "~0.1.17",
-        "grunt-zip": "~0.13.0",
+        "grunt-exec": "~0.4.6",
+        "grunt-node-webkit-builder": "~0.2.0",
+        "grunt-zip": "~0.16.0",
         "grunt-curl": "~2.0.2"
     },
     "devDependenciesBackup": {
