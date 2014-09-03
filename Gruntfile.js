@@ -5,10 +5,10 @@ module.exports = function (grunt) {
     grunt.util.linefeed = '\n';
 
     // Platforms
-    var inputPlatforms = (grunt.cli.tasks.length === 1 && ['win','nsis','mac','linux32','linux64'].indexOf(grunt.cli.tasks[0]) !== -1)
+    var inputPlatforms = (grunt.cli.tasks.length === 1 && ['win','nsis','osx','mac','linux32','linux64'].indexOf(grunt.cli.tasks[0]) !== -1)
             ? grunt.cli.tasks[0] : 'all',
         buildPlatforms = {
-            mac: /mac|all/.test(inputPlatforms),
+            mac: /mac|osx|all/.test(inputPlatforms),
             win: /win|nsis|all/.test(inputPlatforms),
             linux32: /linux32|all/.test(inputPlatforms),
             linux64: /linux64|all/.test(inputPlatforms)
@@ -21,6 +21,7 @@ module.exports = function (grunt) {
         app: grunt.file.readJSON('app/package.json'),
         twister_win_ia32_url: 'https://dl.dropboxusercontent.com/s/pmshsw59a42opzg/twister-0.9.25-win32.zip',
         twister_mac_x64_url: 'http://twisterd.net/osx_bin.zip',
+        twister_bootstrap_db48_url: 'https://dl.dropboxusercontent.com/s/oy7wetm2jcgvnxz/bootstrap48.zip',
         nsis_path: process.platform === 'win32' ? (process.arch === 'x64' ? '%ProgramFiles(x86)%' : '%ProgramFiles%') + '\\NSIS\\' : '',
 
         // Task configuration.
@@ -44,25 +45,25 @@ module.exports = function (grunt) {
                     {
                         cwd: 'build/themes/twister-html-master',
                         src: ['**'],
-                        dest: 'build/releases/twister/win/twister/html/default/',
+                        dest: 'build/twister/win/html/default/',
                         expand: true
                     },
                     {
                         cwd: 'build/themes/twister-html-master',
                         src: ['**'],
-                        dest: 'build/releases/twister/mac/twister.app/Contents/Resources/html/default/',
+                        dest: 'build/twister/osx/twister.app/Contents/Resources/html/default/',
                         expand: true
                     },
                     {
                         cwd: 'build/themes/twister-html-master',
                         src: ['**'],
-                        dest: 'build/releases/twister/linux32/twister/html/default/',
+                        dest: 'build/twister/linux32/html/default/',
                         expand: true
                     },
                     {
                         cwd: 'build/themes/twister-html-master',
                         src: ['**'],
-                        dest: 'build/releases/twister/linux64/twister/html/default/',
+                        dest: 'build/twister/linux64/html/default/',
                         expand: true
                     }
                 ]
@@ -72,52 +73,118 @@ module.exports = function (grunt) {
                     {
                         cwd: 'build/themes/twister-calm-master',
                         src: ['**'],
-                        dest: 'build/releases/twister/win/twister/html/calm/',
+                        dest: 'build/twister/win/html/calm/',
                         expand: true
                     },
                     {
                         cwd: 'build/themes/twister-calm-master',
                         src: ['**'],
-                        dest: 'build/releases/twister/mac/twister.app/Contents/Resources/html/calm/',
+                        dest: 'build/twister/osx/twister.app/Contents/Resources/html/calm/',
                         expand: true
                     },
                     {
                         cwd: 'build/themes/twister-calm-master',
                         src: ['**'],
-                        dest: 'build/releases/twister/linux32/twister/html/calm/',
+                        dest: 'build/twister/linux32/html/calm/',
                         expand: true
                     },
                     {
                         cwd: 'build/themes/twister-calm-master',
                         src: ['**'],
-                        dest: 'build/releases/twister/linux64/twister/html/calm/',
+                        dest: 'build/twister/linux64/html/calm/',
+                        expand: true
+                    }
+                ]
+            },
+            theme_nin: {
+                files: [
+                    {
+                        cwd: 'build/themes/twister-nin-master',
+                        src: ['**'],
+                        dest: 'build/twister/win/html/nin/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/themes/twister-nin-master',
+                        src: ['**'],
+                        dest: 'build/twister/osx/twister.app/Contents/Resources/html/nin/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/themes/twister-nin-master',
+                        src: ['**'],
+                        dest: 'build/twister/linux32/html/nin/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/themes/twister-nin-master',
+                        src: ['**'],
+                        dest: 'build/twister/linux64/html/nin/',
                         expand: true
                     }
                 ]
             },
             empty: {
                 files: {
-                    'build/releases/twister/win/twister/html/': 'empty.html',
-                    'build/releases/twister/mac/twister.app/Contents/Resources/html/': 'empty.html',
-                    'build/releases/twister/linux32/twister/html/': 'empty.html',
-                    'build/releases/twister/linux64/twister/html/': 'empty.html'
+                    'build/twister/win/html/': 'empty.html',
+                    'build/twister/osx/twister.app/Contents/Resources/html/': 'empty.html',
+                    'build/twister/linux32/html/': 'empty.html',
+                    'build/twister/linux64/html/': 'empty.html'
                 }
+            },
+            bootstrap: {
+                files: [
+                    {
+                        cwd: 'build/bootstrap/db48',
+                        src: ['**'],
+                        dest: 'build/twister/win/bootstrap/',
+                        expand: true
+                    }/*,
+                    {
+                        cwd: 'build/bootstrap',
+                        src: ['**'],
+                        dest: 'build/twister/osx/twister.app/Contents/Resources/bootstrap/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/bootstrap',
+                        src: ['**'],
+                        dest: 'build/twister/linux32/bootstrap/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/bootstrap',
+                        src: ['**'],
+                        dest: 'build/twister/linux64/bootstrap/',
+                        expand: true
+                    }*/
+                ]
+            },
+            twister_win_ia32: {
+                files: [
+                    {
+                        cwd: 'build/twister-win32-bundle',
+                        src: ['**'],
+                        dest: 'build/twister/win/bin/',
+                        expand: true
+                    }
+                ]
             },
             twister_osx_x64: {
                 files: [
                     {
                         cwd: 'build/download/twister-osx-bundle/bin',
                         src: ['**'],
-                        dest: 'build/releases/twister/mac/twister.app/Contents/Resources/bin/',
-                        mode: 777, // =c777
+                        dest: 'build/twister/osx/twister.app/Contents/Resources/bin/',
+                        mode: 511, // =0777
                         expand: true
                     }
-                    ]
+                ]
             },        
             nsis: {
                 files: [
                     {
-                        cwd: 'build/releases/twister/win/twister/',
+                        cwd: 'build/twister/win/',
                         src: ['**'],
                         dest: 'build-win/source',
                         expand: true
@@ -132,6 +199,12 @@ module.exports = function (grunt) {
                         cwd: 'build/themes/twister-calm-master',
                         src: ['**'],
                         dest: 'build-win/source/html/calm/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/themes/twister-nin-master',
+                        src: ['**'],
+                        dest: 'build-win/source/html/nin/',
                         expand: true
                     },
                     {
@@ -164,7 +237,7 @@ module.exports = function (grunt) {
                 },
                 files: [
                     {
-                        cwd: 'build/releases/twister/win/twister',
+                        cwd: 'build/twister/win',
                         src: ['**'],
                         expand: true
                     }
@@ -177,17 +250,17 @@ module.exports = function (grunt) {
                 },
                 files: [
                     {
-                        cwd: 'build/releases/twister/mac/',
+                        cwd: 'build/twister/osx/',
                         src: ['**'],
                         mode: 484, // = 0744
                         expand: true
-                    },
+                    }/*,
                     {
                         cwd: 'build-mac/',
                         src: ['build-twister.sh'],
                         mode: 484, // = 0744
                         expand: true
-                    }
+                    }*/
                 ]
             },
             twister_linux_ia32: {
@@ -197,27 +270,27 @@ module.exports = function (grunt) {
                 },
                 files: [
                     {
-                        cwd: 'build/releases/twister/linux32/',
-                        src: ['twister/html/**', 'twister/nw.pak', 'twister/libffmpegsumo.so'],
+                        cwd: 'build/twister/linux32/',
+                        src: ['html/**', 'nw.pak', 'libffmpegsumo.so'],
                         expand: true
                     },
                     {
-                        cwd: 'build/releases/twister/linux32/',
-                        src: ['twister/twister'],
+                        cwd: 'build/twister/linux32/',
+                        src: ['twister'],
                         mode: 484, // = 0744
                         expand: true
                     },
                     {
                         cwd: 'build-linux/',
                         src: ['twister.sh', 'build-twister.sh'],
-                        dest: 'twister/',
+//                        dest: 'twister/',
                         mode: 484, // = 0744
                         expand: true
                     },
                     {
                         cwd: 'build-linux/',
                         src: ['*.png'],
-                        dest: 'twister/',
+//                        dest: 'twister/',
                         expand: true
                     }
                 ]
@@ -229,27 +302,27 @@ module.exports = function (grunt) {
                 },
                 files: [
                     {
-                        cwd: 'build/releases/twister/linux64/',
-                        src: ['twister/html/**', 'twister/nw.pak', 'twister/libffmpegsumo.so'],
+                        cwd: 'build/twister/linux64/',
+                        src: ['html/**', 'nw.pak', 'libffmpegsumo.so'],
                         expand: true
                     },
                     {
-                        cwd: 'build/releases/twister/linux64/',
-                        src: ['twister/twister'],
+                        cwd: 'build/twister/linux64/',
+                        src: ['twister'],
                         mode: 484, // = 0744
                         expand: true
                     },
                     {
                         cwd: 'build-linux/',
                         src: ['twister.sh', 'build-twister.sh'],
-                        dest: 'twister/',
+//                        dest: 'twister/',
                         mode: 484, // = 0744
                         expand: true
                     },
                     {
                         cwd: 'build-linux/',
                         src: ['*.png'],
-                        dest: 'twister/',
+//                        dest: 'twister/',
                         expand: true
                     }
                 ]
@@ -265,6 +338,15 @@ module.exports = function (grunt) {
                 files: {
                     'build/download/twister-theme-calm.zip': 'https://codeload.github.com/iHedgehog/twister-calm/zip/master'
                 }
+            },
+            twister_theme_nin: {
+                files: {
+                    'build/download/twister-theme-nin.zip': 'https://codeload.github.com/myleneb/twister-nin/zip/master'
+                }
+            },
+            bootstrap_db48: {
+                src: '<%= twister_bootstrap_db48_url %>',
+                dest: 'build/download/bootstrap48.zip'
             },
             twister_win_ia32: {
                 src: '<%= twister_win_ia32_url %>',
@@ -283,6 +365,14 @@ module.exports = function (grunt) {
             twister_calm: {
                 src: 'build/download/twister-theme-calm.zip',
                 dest: 'build/themes'
+            },
+            twister_nin: {
+                src: 'build/download/twister-theme-nin.zip',
+                dest: 'build/themes'
+            },
+            bootstrap_db48: {
+                src: 'build/download/bootstrap48.zip',
+                dest: 'build/bootstrap/db48'
             },
             twister_win_ia32: {
                 src: 'build/download/twister-win32-bundle.zip',
@@ -314,84 +404,139 @@ module.exports = function (grunt) {
 
     // Default task.
     grunt.registerTask('default', [
+        // make node-webkit app
         'copy:app',
         'nodewebkit',
+        // add themes
         'curl:twister_theme_default',
         'curl:twister_theme_calm',
-        'curl:twister_win_ia32',
-        'curl:twister_osx_x64',
+        'curl:twister_theme_nin',
         'unzip:twister_default',
         'unzip:twister_calm',
-        'unzip:twister_win_ia32',
-        'unzip:twister_osx_x64',
-        'copy:twister_osx_x64',
+        'unzip:twister_nin',
         'copy:theme_default',
         'copy:theme_calm',
+        'copy:theme_nin',
         'copy:empty',
+        // add blockchain bootstrap
+        'curl:bootstrap_db48',
+        'unzip:bootstrap_db48',
+        'copy:bootstrap',
+        // add binaries
+        'curl:twister_win_ia32',
+        'curl:twister_osx_x64',
+        'unzip:twister_win_ia32',
+        'unzip:twister_osx_x64',
+        'copy:twister_win_ia32',
+        'copy:twister_osx_x64',
+        // final compressing
         'compress'
     ]);
     // Win32
     grunt.registerTask('win', [
+        // make node-webkit app
         'copy:app',
         'nodewebkit',
+        // add themes
         'curl:twister_theme_default',
         'curl:twister_theme_calm',
-        'curl:twister_win_ia32',
+        'curl:twister_theme_nin',
         'unzip:twister_default',
         'unzip:twister_calm',
-        'unzip:twister_win_ia32',
+        'unzip:twister_nin',
         'copy:theme_default',
         'copy:theme_calm',
+        'copy:theme_nin',
         'copy:empty',
+        // add blockchain bootstrap
+        'curl:bootstrap_db48',
+        'unzip:bootstrap_db48',
+        'copy:bootstrap',
+        // add binaries
+        'curl:twister_win_ia32',
+        'unzip:twister_win_ia32',
+        'copy:twister_win_ia32',
+        // final compressing
         'compress:twister_win_ia32'
     ]);
     // Mac OSX
-    grunt.registerTask('mac', [
+    grunt.registerTask('osx', [
+        // make node-webkit app
         'copy:app',
         'nodewebkit',
+        // add themes
         'curl:twister_theme_default',
         'curl:twister_theme_calm',
-        'curl:twister_osx_x64',
+        'curl:twister_theme_nin',
         'unzip:twister_default',
         'unzip:twister_calm',
-        'unzip:twister_osx_x64',
-        'copy:twister_osx_x64',
+        'unzip:twister_nin',
         'copy:theme_default',
         'copy:theme_calm',
+        'copy:theme_nin',
         'copy:empty',
+        // add blockchain bootstrap
+//        'curl:bootstrap_db48',
+//        'unzip:bootstrap_db48',
+        'copy:bootstrap',
+        // add binaries
+        'curl:twister_osx_x64',
+        'unzip:twister_osx_x64',
+        'copy:twister_osx_x64',
+        // final compressing
         'compress:twister_osx_x64'
     ]);
     // Linux32
     grunt.registerTask('linux32', [
+        // make node-webkit app
         'copy:app',
         'nodewebkit',
+        // add themes
         'curl:twister_theme_default',
         'curl:twister_theme_calm',
+        'curl:twister_theme_nin',
         'unzip:twister_default',
         'unzip:twister_calm',
+        'unzip:twister_nin',
         'copy:theme_default',
         'copy:theme_calm',
+        'copy:theme_nin',
         'copy:empty',
+        // add blockchain bootstrap
+//        'curl:bootstrap_db48',
+//        'unzip:bootstrap_db48',
+        'copy:bootstrap',
+        // add binaries
+        // final compressing
         'compress:twister_linux_ia32'
     ]);
     // Linux64
     grunt.registerTask('linux64', [
+        // make node-webkit app
         'copy:app',
         'nodewebkit',
+        // add themes
         'curl:twister_theme_default',
         'curl:twister_theme_calm',
+        'curl:twister_theme_nin',
         'unzip:twister_default',
         'unzip:twister_calm',
+        'unzip:twister_nin',
         'copy:theme_default',
         'copy:theme_calm',
+        'copy:theme_nin',
         'copy:empty',
+        // add blockchain bootstrap
+//        'curl:bootstrap_db48',
+//        'unzip:bootstrap_db48',
+        'copy:bootstrap',
+        // add binaries
+        // final compressing
         'compress:twister_linux_x64'
     ]);
     // Win32 - NSIS
     grunt.registerTask('nsis', [
         'win',
-//        'curl:twister_win_ia32',
-//        'unzip:twister_win_ia32',
         'copy:nsis',
         'exec:nsis'
     ]);
