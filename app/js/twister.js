@@ -176,12 +176,10 @@ window.Twister = function () {
         }
 
         childDaemon = rpcCall(twisterd_args_daemon, function (error) {
+            childDaemon = null;
             if (error && error.killed === true) {
                 win.emit('twisterstop');
-                childDaemon = null;
-                return;
-            }
-            if (!isTwisterdOn) {
+            } else if (!isTwisterdOn && !isStop) {
                 var event = new CustomEvent('twisterfail');
                 event.error = {
                     message: error.message,
@@ -189,7 +187,6 @@ window.Twister = function () {
                 };
                 window.dispatchEvent(event);
             }
-            childDaemon = null;
         });
 
         waitTwisterStart(callback);
@@ -201,7 +198,7 @@ window.Twister = function () {
      */
     this.tryStart = function (callback) {
         if (checkRunningId) {
-            clearInterval();
+            clearInterval(checkRunningId);
             checkRunningId = 0;
         }
 
@@ -237,12 +234,13 @@ window.Twister = function () {
             win.removeAllListeners('twisterstop');
         });
 
-        rpcCall(['stop'], function () {
+        rpcCall(['stop'], function (error) {
             if (childDaemon) {
                 childDaemon.stdout.destroy();
                 childDaemon.stderr.destroy();
                 childDaemon.unref();
             }
+            curNodeIndex = Infinity;
             setTimeout(function () {
                 if (childDaemon) {
                     try {
