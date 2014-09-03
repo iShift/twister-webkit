@@ -18,16 +18,23 @@ window.Twister = function () {
         }
     }
 
+    var isCygwin = false;
     function escapePath(path) {
         if (isWin32) {
-            path = path.split(':');
-            if (path[1]) {
-                path = '/cygdrive/' + path[0].toLowerCase() + path[1].replace(/\\/g, '/');
+            if (isCygwin) {
+                // Cygwin escaping
+                path = path.split(':');
+                if (path[1]) {
+                    path = '/cygdrive/' + path[0].toLowerCase() + path[1].replace(/\\/g, '/');
+                } else {
+                    path = path[0].replace(/\\/g, '/')
+                }
             } else {
-                path = path[0].replace(/\\/g, '/')
+                // MinGW escaping
+                path = path.replace(/\//g, '\\').replace(/([()%!^"<>&|;, ])/g, '^$1');
             }
         } else {
-            path = path.replace(/ /g, '\\ ');
+            path = path.replace(/[^a-zA-Z0-9_]/g, '\\$1');
         }
         return path;
     }
