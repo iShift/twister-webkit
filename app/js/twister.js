@@ -12,22 +12,29 @@ window.Twister = function () {
 
     function getDefaultDataDir() {
         if (isMac) {
-            return process.env.HOME + '/.twister';
+            return process.env.HOME + '/Library/Application Support/Twister';
         } else {
             return process.env.HOME + ds + '.twister';
         }
     }
 
+    var isCygwin = false;
     function escapePath(path) {
         if (isWin32) {
-            path = path.split(':');
-            if (path[1]) {
-                path = '/cygdrive/' + path[0].toLowerCase() + path[1].replace(/\\/g, '/');
+            if (isCygwin) {
+                // Cygwin escaping
+                path = path.split(':');
+                if (path[1]) {
+                    path = '/cygdrive/' + path[0].toLowerCase() + path[1].replace(/\\/g, '/');
+                } else {
+                    path = path[0].replace(/\\/g, '/')
+                }
             } else {
-                path = path[0].replace(/\\/g, '/')
+                // MinGW escaping
+                path = path.replace(/\//g, '\\').replace(/([()%!^"<>&|;, ])/g, '^$1');
             }
         } else {
-            path = path.replace(/ /g, '\\ ');
+            path = path.replace(/[^a-zA-Z0-9_]/g, '\\$1');
         }
         return path;
     }
@@ -63,12 +70,6 @@ window.Twister = function () {
     var that = this,
         twisterd_themes_dir = './html',
         twisterd_args_common = [],
-        twisterNodes = [
-            'seed3.twister.net.co',
-            'seed2.twister.net.co',
-            'seed.twister.net.co',
-            'dnsseed.gombadi.com'
-        ],
         curNodeIndex = Infinity,
         childDaemon = null,
         checkRunningId = 0,
@@ -99,7 +100,7 @@ window.Twister = function () {
             } catch (e) {
                 console.log(e);
             }
-            copyRecursiveSync(appDir + ds + 'data', settings.twisterdDatadir);
+            copyRecursiveSync(appDir + ds + 'bootstrap', settings.twisterdDatadir);
         }
     } catch (e) {
         console.log(e);
@@ -182,12 +183,10 @@ window.Twister = function () {
         }
 
         childDaemon = rpcCall(twisterd_args_daemon, function (error) {
+            childDaemon = null;
             if (error && error.killed === true) {
                 win.emit('twisterstop');
-                childDaemon = null;
-                return;
-            }
-            if (!isTwisterdOn) {
+            } else if (!isTwisterdOn && !isStop) {
                 var event = new CustomEvent('twisterfail');
                 event.error = {
                     message: error.message,
@@ -195,7 +194,6 @@ window.Twister = function () {
                 };
                 window.dispatchEvent(event);
             }
-            childDaemon = null;
         });
 
         waitTwisterStart(callback);
@@ -207,7 +205,7 @@ window.Twister = function () {
      */
     this.tryStart = function (callback) {
         if (checkRunningId) {
-            clearInterval();
+            clearInterval(checkRunningId);
             checkRunningId = 0;
         }
 
@@ -243,12 +241,13 @@ window.Twister = function () {
             win.removeAllListeners('twisterstop');
         });
 
-        rpcCall(['stop'], function () {
+        rpcCall(['stop'], function (error) {
             if (childDaemon) {
                 childDaemon.stdout.destroy();
                 childDaemon.stderr.destroy();
                 childDaemon.unref();
             }
+            curNodeIndex = Infinity;
             setTimeout(function () {
                 if (childDaemon) {
                     try {
@@ -296,8 +295,8 @@ window.Twister = function () {
      */
     function loopAddNodes() {
         setTimeout(function () {
-            if (curNodeIndex < twisterNodes.length) {
-                addNode(twisterNodes[curNodeIndex++]);
+            if (curNodeIndex < settings.twisterNodes.length) {
+                addNode(settings.twisterNodes[curNodeIndex++]);
                 loopAddNodes();
             }
         }, addNodeInterval);
@@ -352,7 +351,7 @@ window.Twister = function () {
      */
     this.isWorking = function (callback) {
         var req = new XMLHttpRequest();
-        req.open('GET', 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/empty.html');
+        req.open('POST', 'http://' + settings.rpcHost + ':' + settings.rpcPort + '/empty.html');
         req.timeout = rpcCheckTimeout;
         req.withCredentials = true;
         req.setRequestHeader('Authorization', 'Basic ' + btoa(settings.rpcUser + ':' + settings.rpcPassword));

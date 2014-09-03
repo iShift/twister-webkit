@@ -125,6 +125,9 @@ window.addEventListener('init', function () {
                     }
                 }
                 settings.theme = theme;
+                if (window.$ && window.$.localStorage) {
+                    window.$.localStorage.set('options:theme', theme);
+                }
                 win.updateTheme();
             }
         }));

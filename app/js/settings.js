@@ -21,6 +21,7 @@
  * @property twisterdPath
  * @property twisterdDatadir
  * @property proxy
+ * @property twisterNodes
  */
 window.Settings = function () {
     var that = this;
@@ -39,7 +40,13 @@ window.Settings = function () {
         rpcPassword: '',
         twisterdPath: '',
         twisterdDatadir: '',
-        proxy: ''
+        proxy: '',
+        twisterNodes: [
+            'seed3.twister.net.co',
+            'seed2.twister.net.co',
+            'seed.twister.net.co',
+            'dnsseed.gombadi.com'
+        ]
     };
 
     var fileSettings = appDir + ds + 'settings.ini';
