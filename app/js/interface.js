@@ -162,6 +162,8 @@
 
         if (confirm(msg)) {
             twister.restart(win.onTwisterStart);
+        } else {
+            win.close();
         }
     });
 
