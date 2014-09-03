@@ -63,12 +63,6 @@ window.Twister = function () {
     var that = this,
         twisterd_themes_dir = './html',
         twisterd_args_common = [],
-        twisterNodes = [
-            'seed3.twister.net.co',
-            'seed2.twister.net.co',
-            'seed.twister.net.co',
-            'dnsseed.gombadi.com'
-        ],
         curNodeIndex = Infinity,
         childDaemon = null,
         checkRunningId = 0,
@@ -296,8 +290,8 @@ window.Twister = function () {
      */
     function loopAddNodes() {
         setTimeout(function () {
-            if (curNodeIndex < twisterNodes.length) {
-                addNode(twisterNodes[curNodeIndex++]);
+            if (curNodeIndex < settings.twisterNodes.length) {
+                addNode(settings.twisterNodes[curNodeIndex++]);
                 loopAddNodes();
             }
         }, addNodeInterval);
