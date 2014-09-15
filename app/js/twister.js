@@ -260,6 +260,20 @@ window.Twister = function () {
     };
 
     /**
+     * Stop Twister daemon if it is run
+     * @param {function} [callback]
+     */
+    this.tryStop = function (callback) {
+        if (isRunning()) {
+            twister.stop(callback);
+        } else {
+            if (callback) {
+                callback();
+            }
+        }
+    }
+
+    /**
      * Restart Twister daemon
      * @param {function} [callback]
      */
