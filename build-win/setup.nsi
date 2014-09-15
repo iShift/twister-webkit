@@ -191,17 +191,17 @@ SectionGroup /e "Themes" SEC03
 
   Section "Default" SEC04
     SectionIn RO
-    SetOutPath "$INSTDIR"
+    SetOutPath "$INSTDIR\html"
     File /r "source\html\default"
   SectionEnd
 
   Section "Calm" SEC05
-    SetOutPath "$INSTDIR"
+    SetOutPath "$INSTDIR\html"
     File /r "source\html\calm"
   SectionEnd
 
   Section "Nin" SEC06
-    SetOutPath "$INSTDIR"
+    SetOutPath "$INSTDIR\html"
     File /r "source\html\nin"
   SectionEnd
 
