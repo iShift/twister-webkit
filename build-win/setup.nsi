@@ -1,3 +1,4 @@
+; makensis /DVersion="VERSION_HERE" setup.nsi
 !ifndef Version
   StrCpy $Version "0.0.1"
 !endif
@@ -178,10 +179,6 @@ Section "Core Files" SEC01
   File "source\*.dll"
   ; Add twister-core
   File /r "source\bin"
-  ; Themes
-  File /r "source\html"
-  ; Create data directory for twisterd daemon files
-  CreateDirectory "$INSTDIR\data"
 
 ; === Shortcuts ===
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -190,18 +187,39 @@ Section "Core Files" SEC01
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
+SectionGroup /e "Themes" SEC03
 
+  Section "Default" SEC04
+    SectionIn RO
+    SetOutPath "$INSTDIR\html"
+    File /r "source\html\default"
+    File "source\html\empty.html"
+  SectionEnd
 
-Section "Add Shortcut to Desktop" SEC02
+  Section "Calm" SEC05
+    SetOutPath "$INSTDIR\html"
+    File /r "source\html\calm"
+  SectionEnd
+
+  Section "Nin" SEC06
+    SetOutPath "$INSTDIR\html"
+    File /r "source\html\nin"
+  SectionEnd
+
+SectionGroupEnd
+
+Section "Blockchain dump" SEC02
+  SetOutPath "$INSTDIR"
+  File /r "source\bootstrap"
+SectionEnd
+
+Section "Add Shortcut to Desktop" SEC07
   CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAINEXE}" "" "$INSTDIR\${PRODUCT_ICON}"
 SectionEnd
 
-
-
-Section "Add Shortcut to Startup" SEC03
+Section "Add Shortcut to Startup" SEC08
   CreateShortCut "$SMSTARTUP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAINEXE}" "" "$INSTDIR\${PRODUCT_ICON}" 0 SW_SHOWMINIMIZED
 SectionEnd
-
 
 
 Section -AdditionalIcons
@@ -233,7 +251,7 @@ Section Uninstall
   Delete "$INSTDIR\*.dll"
   RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\html"
-  RMDir /r "$INSTDIR\data"
+  RMDir /r "$INSTDIR\bootstrap"
 
 ; === Delete shortcuts ===
   Delete "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}.lnk"
