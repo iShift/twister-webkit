@@ -228,7 +228,7 @@ module.exports = function (grunt) {
                 linux64: buildPlatforms.linux64,
                 macCredits: 'build-mac/credits.html',
                 macIcns: 'build-mac/nw.icns',
-                winIco : 'build-win/twister.ico'
+//                winIco: 'build-win/twister.ico'
             }
         },
         compress: {
