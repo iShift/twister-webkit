@@ -31,10 +31,10 @@ window.Twister = function () {
                 }
             } else {
                 // MinGW escaping
-                path = path.replace(/\//g, '\\').replace(/([()%!^"<>&|;, ])/g, '^$1');
+//                path = path.replace(/\//g, '\\').replace(/([()%!^"<>&|;, ])/g, '^$1');
             }
         } else {
-            path = path.replace(/[^a-zA-Z0-9_]/g, '\\$1');
+//            path = path.replace(/[^a-zA-Z0-9_]/g, '\\$1');
         }
         return path;
     }
