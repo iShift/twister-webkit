@@ -219,14 +219,16 @@ module.exports = function (grunt) {
         nodewebkit: {
             src: ['build/source/**/*'],
             options: {
-                build_dir: 'build',
+                buildDir: 'build',
+                cacheDir: 'build/cache',
                 version: '0.9.2',
                 win: buildPlatforms.win,
                 mac: buildPlatforms.mac,
                 linux32: buildPlatforms.linux32,
                 linux64: buildPlatforms.linux64,
-                credits: 'build-mac/credits.html',
-                mac_icns: 'build-mac/nw.icns'
+                macCredits: 'build-mac/credits.html',
+                macIcns: 'build-mac/nw.icns',
+                winIco : 'build-win/twister.ico'
             }
         },
         compress: {
