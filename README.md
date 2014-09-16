@@ -9,8 +9,6 @@ Screenshots
 ===========
 ![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/screenshot_1.png "Screenshot 1")
 ![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/screenshot_1.png "Screenshot 2")
-![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/1.PNG "Screenshot 1")
-![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/2.PNG "Screenshot 2")
 
 Where i can get?
 ================
@@ -51,4 +49,16 @@ Download and setup NSIS (Nullsoft Scriptable Install System) 2.46: http://nsis.s
 
 to download prebuilt version of Twister core for Windows and generate all-in-one setup executable file in
 `build-win/Twister-[ver].exe`.
+
+TODO
+===========================
+- [ ] TOR settings
+- [ ] TCP Relay Settings
+- [ ] Key Encryption Settings (or in core?)
+- [ ] Key Backup/Sync Settings (Dropbox / Bittorrent Sync / Apple iCloud)
+- [ ] Proxy settings
+- [ ] Welcome windows 
+- [ ] First launch wizard 
+- [ ] Kill all bugs
+- [ ] Publish to Mac App Store
 
