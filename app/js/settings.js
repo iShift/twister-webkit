@@ -53,7 +53,7 @@ window.Settings = function () {
 
     function loadSettings() {
         try {
-            var input = fs.readFileSync(fileSettings, 'utf8') || '';
+            var input = fs.readFileSync(fileSettings, {encoding: 'utf8'}) || '';
             input.split("\n").forEach(function (line) {
                 var delim = line.indexOf('=');
                 if (delim >= 0) {
@@ -66,6 +66,7 @@ window.Settings = function () {
                                 data[key] = value;
                             }
                         } catch (e) {
+                            console.log(e);
                         }
                     }
                 }
@@ -84,7 +85,7 @@ window.Settings = function () {
             }
         }
         try {
-            fs.writeFileSync(fileSettings, output);
+            fs.writeFileSync(fileSettings, output, {encoding: 'utf8'});
         } catch (e) {
             console.log(e);
         }

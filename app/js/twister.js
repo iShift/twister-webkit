@@ -31,10 +31,10 @@ window.Twister = function () {
                 }
             } else {
                 // MinGW escaping
-                path = path.replace(/\//g, '\\').replace(/([()%!^"<>&|;, ])/g, '^$1');
+//                path = path.replace(/\//g, '\\').replace(/([()%!^"<>&|;, ])/g, '^$1');
             }
         } else {
-            path = path.replace(/[^a-zA-Z0-9_]/g, '\\$1');
+//            path = path.replace(/[^a-zA-Z0-9_]/g, '\\$1');
         }
         return path;
     }
@@ -258,6 +258,20 @@ window.Twister = function () {
             }, 5*1000);
         });
     };
+
+    /**
+     * Stop Twister daemon if it is run
+     * @param {function} [callback]
+     */
+    this.tryStop = function (callback) {
+        if (isRunning()) {
+            twister.stop(callback);
+        } else {
+            if (callback) {
+                callback();
+            }
+        }
+    }
 
     /**
      * Restart Twister daemon

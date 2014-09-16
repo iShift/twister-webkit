@@ -77,7 +77,7 @@
     win.on('close', function () {
         win.hide();
         win.displayLoader();
-        twister.stop(function () {
+        twister.tryStop(function () {
             win.close(true);
         });
     });
