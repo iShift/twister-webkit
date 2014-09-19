@@ -221,7 +221,7 @@ module.exports = function (grunt) {
             options: {
                 buildDir: 'build',
                 cacheDir: 'build/cache',
-                version: '0.9.2',
+                version: '0.10.5',
                 win: buildPlatforms.win,
                 mac: buildPlatforms.mac,
                 linux32: buildPlatforms.linux32,
