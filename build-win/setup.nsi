@@ -176,7 +176,9 @@ Section "Core Files" SEC01
   ; Add node-webkit files
   File "source\${PRODUCT_MAINEXE}"
   File "source\nw.pak"
+  File "source\icudtl.dat"
   File "source\*.dll"
+  File /r "source\locales"
   ; Add twister-core
   File /r "source\bin"
 
@@ -248,6 +250,7 @@ Section Uninstall
   Delete "$INSTDIR\${PRODUCT_ICON}"
   Delete "$INSTDIR\${PRODUCT_MAINEXE}"
   Delete "$INSTDIR\nw.pak"
+  Delete "$INSTDIR\icudtl.dat"
   Delete "$INSTDIR\*.dll"
   RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\html"

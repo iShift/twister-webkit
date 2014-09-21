@@ -30,6 +30,28 @@ module.exports = function (grunt) {
             nsis: ['build-win/source/**/*', 'build-win/*.exe']
         },
         copy: {
+            nodewebkit_locales: {
+                files: [
+                    {
+                        cwd: 'build/cache/0.10.5/win',
+                        src: ['locales/**'],
+                        dest: 'build/twister/win/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/cache/0.10.5/linux32',
+                        src: ['locales/**'],
+                        dest: 'build/twister/linux32/',
+                        expand: true
+                    },
+                    {
+                        cwd: 'build/cache/0.10.5/linux64',
+                        src: ['locales/**'],
+                        dest: 'build/twister/linux64/',
+                        expand: true
+                    }
+                ]
+            },
             app: {
                 files: [
                     {
@@ -273,7 +295,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         cwd: 'build/twister/linux32/',
-                        src: ['html/**', 'nw.pak', 'libffmpegsumo.so'],
+                        src: ['html/**', 'nw.pak', 'icudtl.dat', 'libffmpegsumo.so', 'locales/**'],
                         expand: true
                     },
                     {
@@ -305,7 +327,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         cwd: 'build/twister/linux64/',
-                        src: ['html/**', 'nw.pak', 'libffmpegsumo.so'],
+                        src: ['html/**', 'nw.pak', 'icudtl.dat', 'libffmpegsumo.so', 'locales/**'],
                         expand: true
                     },
                     {
@@ -409,6 +431,7 @@ module.exports = function (grunt) {
         // make node-webkit app
         'copy:app',
         'nodewebkit',
+        'copy:nodewebkit_locales',
         // add themes
         'curl:twister_theme_default',
         'curl:twister_theme_calm',
@@ -439,6 +462,7 @@ module.exports = function (grunt) {
         // make node-webkit app
         'copy:app',
         'nodewebkit',
+        'copy:nodewebkit_locales',
         // add themes
         'curl:twister_theme_default',
         'curl:twister_theme_calm',
@@ -493,6 +517,7 @@ module.exports = function (grunt) {
         // make node-webkit app
         'copy:app',
         'nodewebkit',
+        'copy:nodewebkit_locales',
         // add themes
         'curl:twister_theme_default',
         'curl:twister_theme_calm',
@@ -517,6 +542,7 @@ module.exports = function (grunt) {
         // make node-webkit app
         'copy:app',
         'nodewebkit',
+        'copy:nodewebkit_locales',
         // add themes
         'curl:twister_theme_default',
         'curl:twister_theme_calm',
