@@ -183,6 +183,7 @@ Section "Core Files" SEC01
   File /r "source\bin"
 
 ; === Shortcuts ===
+  CreateShortCut "$INSTDIR\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAINEXE}" "" "$INSTDIR\${PRODUCT_ICON}"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAINEXE}" "" "$INSTDIR\${PRODUCT_ICON}"
@@ -249,6 +250,7 @@ Section Uninstall
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\${PRODUCT_ICON}"
   Delete "$INSTDIR\${PRODUCT_MAINEXE}"
+  Delete "$INSTDIR\${PRODUCT_NAME}.lnk"
   Delete "$INSTDIR\nw.pak"
   Delete "$INSTDIR\icudtl.dat"
   Delete "$INSTDIR\*.dll"
