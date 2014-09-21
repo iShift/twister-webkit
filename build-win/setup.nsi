@@ -211,8 +211,8 @@ SectionGroup /e "Themes" SEC03
 SectionGroupEnd
 
 Section "Blockchain dump" SEC02
-  SetOutPath "$INSTDIR"
-  File /r "source\bootstrap"
+  SetOutPath "$PROFILE\.twister"
+  File /r "source\bootstrap\*.*"
 SectionEnd
 
 Section "Add Shortcut to Desktop" SEC07
