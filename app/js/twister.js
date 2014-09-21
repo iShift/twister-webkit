@@ -100,7 +100,7 @@ window.Twister = function () {
             } catch (e) {
                 console.log(e);
             }
-            copyRecursiveSync(appDir + ds + 'bootstrap', settings.twisterdDatadir);
+            /*copyRecursiveSync(appDir + ds + 'bootstrap', settings.twisterdDatadir);*/
         }
     } catch (e) {
         console.log(e);

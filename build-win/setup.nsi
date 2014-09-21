@@ -176,11 +176,14 @@ Section "Core Files" SEC01
   ; Add node-webkit files
   File "source\${PRODUCT_MAINEXE}"
   File "source\nw.pak"
+  File "source\icudtl.dat"
   File "source\*.dll"
+  File /r "source\locales"
   ; Add twister-core
   File /r "source\bin"
 
 ; === Shortcuts ===
+  CreateShortCut "$INSTDIR\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAINEXE}" "" "$INSTDIR\${PRODUCT_ICON}"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAINEXE}" "" "$INSTDIR\${PRODUCT_ICON}"
@@ -209,8 +212,8 @@ SectionGroup /e "Themes" SEC03
 SectionGroupEnd
 
 Section "Blockchain dump" SEC02
-  SetOutPath "$INSTDIR"
-  File /r "source\bootstrap"
+  SetOutPath "$PROFILE\.twister"
+  File /r "source\bootstrap\*.*"
 SectionEnd
 
 Section "Add Shortcut to Desktop" SEC07
@@ -247,7 +250,9 @@ Section Uninstall
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\${PRODUCT_ICON}"
   Delete "$INSTDIR\${PRODUCT_MAINEXE}"
+  Delete "$INSTDIR\${PRODUCT_NAME}.lnk"
   Delete "$INSTDIR\nw.pak"
+  Delete "$INSTDIR\icudtl.dat"
   Delete "$INSTDIR\*.dll"
   RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\html"
