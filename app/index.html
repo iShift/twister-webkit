@@ -76,7 +76,7 @@
     </style>
 </head>
 <body>
-<script>document.write('<script src="locale/' + navigator.language + '.js"><\/script>');</script>
+<script>document.write('<script src="locale/' + (navigator.language.indexOf('-') < 0 ? navigator.language + '-' + navigator.language.toUpperCase() : navigator.language) + '.js"><\/script>');</script>
 <div id="updater">
     <b class="version"></b>
     <input type="checkbox" class="expand" checked>
