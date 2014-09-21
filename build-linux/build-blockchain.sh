@@ -23,7 +23,7 @@ printbold() {
 printbold "Create data directory"
 
 mkdir data
-twisterd -daemon -datadir=./data/ -rpcuser=user -rpcpassword=pwd -rpcallowip=127.0.0.1
+twisterd -daemon -datadir=./data/ -rpcuser=user -rpcpassword=pwd -rpcallowip=127.0.0.1 -dhtproxy
 sleep 15
 twisterd -datadir=./data/ -rpcuser=user -rpcpassword=pwd addnode seed3.twister.net.co onetry
 sleep 5
