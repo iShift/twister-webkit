@@ -14,9 +14,6 @@ Where i can get?
 ================
 https://github.com/iShift/twister-webkit/releases
 
-What i need ?
-=============
-You need to compile and start twisterd daemon https://github.com/miguelfreitas/twister-core
 
 Building own
 ============
@@ -57,7 +54,6 @@ TODO
 - [ ] Key Encryption Settings (or in core?)
 - [ ] Key Backup/Sync Settings (Dropbox / Bittorrent Sync / Apple iCloud)
 - [ ] Proxy settings
-- [ ] Welcome windows 
 - [ ] First launch wizard 
 - [ ] Kill all bugs
 - [ ] Publish to Mac App Store
