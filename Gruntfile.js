@@ -33,19 +33,19 @@ module.exports = function (grunt) {
             nodewebkit_locales: {
                 files: [
                     {
-                        cwd: 'build/cache/0.10.5/win',
+                        cwd: 'build/cache/<%= nodewebkit.options.version %>/win',
                         src: ['locales/**'],
                         dest: 'build/twister/win/',
                         expand: true
                     },
                     {
-                        cwd: 'build/cache/0.10.5/linux32',
+                        cwd: 'build/cache/<%= nodewebkit.options.version %>/linux32',
                         src: ['locales/**'],
                         dest: 'build/twister/linux32/',
                         expand: true
                     },
                     {
-                        cwd: 'build/cache/0.10.5/linux64',
+                        cwd: 'build/cache/<%= nodewebkit.options.version %>/linux64',
                         src: ['locales/**'],
                         dest: 'build/twister/linux64/',
                         expand: true
