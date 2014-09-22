@@ -158,7 +158,8 @@ window.addEventListener('init', function () {
     observer = new WebKitMutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
             var title = mutation.target.textContent;
-            if (mutation.target.parentNode.tagName === 'TITLE') {
+            if (mutation.target.tagName === 'TITLE' || mutation.target.parentNode.tagName === 'TITLE') {
+                title = title || 'twister';
                 win.title = title;
                 tray.tooltip = title;
                 bNewMessages = reNewMessages.test(title);
@@ -187,7 +188,7 @@ window.addEventListener('init', function () {
         /**
          * Copy iframe's title to taskbar and tray
          */
-        var title = iframedoc.title;
+        var title = iframedoc.title || 'twister';
         win.title = title;
         tray.tooltip = title;
 
