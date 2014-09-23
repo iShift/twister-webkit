@@ -19,9 +19,9 @@ module.exports = function (grunt) {
         // Metadata.
         pkg: grunt.file.readJSON('package.json'),
         app: grunt.file.readJSON('app/package.json'),
-        twister_win_ia32_url: 'https://dl.dropboxusercontent.com/s/pmshsw59a42opzg/twister-0.9.25-win32.zip',
+        twister_win_ia32_url: 'http://twisterd.net/webkit/twister-0.9.25-win32.zip',
         twister_mac_x64_url: 'http://twisterd.net/osx_bin.zip',
-        twister_bootstrap_db48_url: 'https://dl.dropboxusercontent.com/s/oy7wetm2jcgvnxz/bootstrap48.zip',
+        twister_bootstrap_db48_url: 'http://twisterd.net/webkit/bootstrap48.zip',
         nsis_path: process.platform === 'win32' ? (process.arch === 'x64' ? '%ProgramFiles(x86)%' : '%ProgramFiles%') + '\\NSIS\\' : '',
 
         // Task configuration.
