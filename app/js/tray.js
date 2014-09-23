@@ -187,6 +187,7 @@ window.addEventListener('init', function () {
 
     addEventListener('updateIframe', function () {
         bNewMessages = false;
+        win.setBadgeLabel('');
 
         var iframedoc = window.getIframeDocument();
 
