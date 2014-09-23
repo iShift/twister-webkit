@@ -161,13 +161,7 @@ VIAddVersionKey /LANG=${LANG_ENGLISH} LegalCopyright ""
 
 
 
-Function .onInit
-  !insertmacro MUI_LANGDLL_DISPLAY
-FunctionEnd
-
-
-
-Section "Core Files" SEC01
+Section "Core Files" sec_core
   SectionIn RO
   SetOutPath "$INSTDIR"
 
@@ -190,37 +184,37 @@ Section "Core Files" SEC01
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
-SectionGroup /e "Themes" SEC03
+SectionGroup /e "Themes" sec_themes
 
-  Section "Default" SEC04
+  Section "Default" sec_themes_default
     SectionIn RO
     SetOutPath "$INSTDIR\html"
     File /r "source\html\default"
     File "source\html\empty.html"
   SectionEnd
 
-  Section "Calm" SEC05
+  Section "Calm" sec_themes_calm
     SetOutPath "$INSTDIR\html"
     File /r "source\html\calm"
   SectionEnd
 
-  Section "Nin" SEC06
+  Section "Nin" sec_themes_nin
     SetOutPath "$INSTDIR\html"
     File /r "source\html\nin"
   SectionEnd
 
 SectionGroupEnd
 
-Section "Blockchain dump" SEC02
+Section /o "Blockchain dump" sec_blockchain
   SetOutPath "$PROFILE\.twister"
   File /r "source\bootstrap\*.*"
 SectionEnd
 
-Section "Add Shortcut to Desktop" SEC07
+Section "Add Shortcut to Desktop" sec_shortcut_desktop
   CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAINEXE}" "" "$INSTDIR\${PRODUCT_ICON}"
 SectionEnd
 
-Section "Add Shortcut to Startup" SEC08
+Section "Add Shortcut to Startup" sec_shortcut_startup
   CreateShortCut "$SMSTARTUP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_MAINEXE}" "" "$INSTDIR\${PRODUCT_ICON}" 0 SW_SHOWMINIMIZED
 SectionEnd
 
@@ -256,7 +250,6 @@ Section Uninstall
   Delete "$INSTDIR\*.dll"
   RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\html"
-  RMDir /r "$INSTDIR\bootstrap"
 
 ; === Delete shortcuts ===
   Delete "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}.lnk"
@@ -271,3 +264,12 @@ Section Uninstall
   DeleteRegKey ${PRODUCT_DIR_ROOT_KEY} "${PRODUCT_DIR_REGKEY}"
   SetAutoClose true
 SectionEnd
+
+
+
+Function .onInit
+  !insertmacro MUI_LANGDLL_DISPLAY
+  IfFileExists $PROFILE\.twister\twisterwallet.dat skip
+    !insertmacro SelectSection ${sec_blockchain}
+  skip:
+FunctionEnd
