@@ -82,6 +82,13 @@
         });
     });
 
+     /**
+      * Open external links in new window
+      */
+    win.on('new-win-policy', function (frame, url, policy) {
+        policy.forceNewWindow();
+    });
+
     /**
      * Disable drag&drop to window
      */

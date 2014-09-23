@@ -14,7 +14,7 @@ window.addEventListener('init', function () {
         }),
         menuTray = new gui.Menu(),
         skipMinimizeToTray = false,
-        reNewMessages = /^\(\d+\)/,
+        reNewMessages = /^\((\d+)\)/,
         observer,
         themeDir = appDir + ds + 'html';
 
@@ -164,6 +164,11 @@ window.addEventListener('init', function () {
                 tray.tooltip = title;
                 bNewMessages = reNewMessages.test(title);
                 tray.icon = bNewMessages ? icon_new : icon_normal;
+                var count = 0;
+                if (bNewMessages) {
+                    count = title.match(reNewMessages)[1];
+                }
+                win.setBadgeLabel(count ? count : '');
             } else {
                 bNewMessages = (title !== '');
             }
@@ -182,6 +187,7 @@ window.addEventListener('init', function () {
 
     addEventListener('updateIframe', function () {
         bNewMessages = false;
+        win.setBadgeLabel('');
 
         var iframedoc = window.getIframeDocument();
 
