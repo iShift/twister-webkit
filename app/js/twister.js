@@ -66,6 +66,7 @@ window.Twister = function () {
     settings.twisterdPath = settings.twisterdPath || appDir + ds + 'bin' + ds + 'twisterd';
     settings.twisterdDatadir = settings.twisterdDatadir || getDefaultDataDir();
     settings.rpcPassword = settings.rpcPassword || getRandomPassword();
+    settings.proxy = settings.proxy || '127.0.0.1:9050';
 
     var that = this,
         twisterd_themes_dir = './html',
@@ -178,8 +179,11 @@ window.Twister = function () {
             '-port=' + settings.port,
             '-htmldir=' + escapePath(twisterd_themes_dir)
         ];
-        if (settings.proxy) {
+        if (settings.enableProxy && settings.proxy) {
             twisterd_args_daemon.push('-proxy=' + settings.proxy);
+        }
+        if (settings.dhtProxy) {
+            twisterd_args_daemon.push('-dhtproxy');
         }
 
         childDaemon = rpcCall(twisterd_args_daemon, function (error) {
