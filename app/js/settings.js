@@ -20,7 +20,9 @@
  * @property rpcPassword
  * @property twisterdPath
  * @property twisterdDatadir
+ * @property enableProxy
  * @property proxy
+ * @property dhtProxy
  * @property twisterNodes
  */
 window.Settings = function () {
@@ -40,7 +42,9 @@ window.Settings = function () {
         rpcPassword: '',
         twisterdPath: '',
         twisterdDatadir: '',
-        proxy: '',
+        enableProxy: false,
+        proxy: '127.0.0.1:9050',
+        dhtProxy: false,
         twisterNodes: [
             'seed3.twister.net.co',
             'seed2.twister.net.co',

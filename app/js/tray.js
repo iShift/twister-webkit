@@ -40,6 +40,13 @@ window.addEventListener('init', function () {
         return dirs;
     }
 
+    function restartTwister() {
+        win.isBroken = true;
+        win.displayLoader();
+        twister.restart(win.onTwisterStart);
+        updateProxyMenuStatus();
+    }
+
     /** TRAY **/
 
     tray.tooltip = 'twister';
@@ -94,12 +101,28 @@ window.addEventListener('init', function () {
                 settings.runMinimized = this.checked;
             }
         }),
+        itemProxy = new gui.MenuItem({
+            type: 'checkbox',
+            label: __('Use proxy: ') + (settings.proxy === '127.0.0.1:9050' ? 'Tor' : settings.proxy),
+            checked: settings.enableProxy,
+            click: function () {
+                settings.enableProxy = this.checked;
+                restartTwister();
+            }
+        }),
+        itemDhtProxy = new gui.MenuItem({
+            type: 'checkbox',
+            label: __('DHT relay mode'),
+            checked: settings.dhtProxy,
+            click: function () {
+                settings.dhtProxy = this.checked;
+                restartTwister();
+            }
+        }),
         itemRestart = new gui.MenuItem({
             label: __('Restart'),
             click: function () {
-                win.isBroken = true;
-                win.displayLoader();
-                twister.restart(win.onTwisterStart);
+                restartTwister();
             }
         }),
         itemQuit = new gui.MenuItem({
@@ -140,11 +163,50 @@ window.addEventListener('init', function () {
     menuTray.append(itemRequestAttention);
     menuTray.append(itemAlwaysOnTop);
     menuTray.append(itemRunMinimized);
+    menuTray.append(itemProxy);
+    menuTray.append(itemDhtProxy);
     menuTray.append(new gui.MenuItem({type: 'separator'}));
     menuTray.append(itemRestart);
     menuTray.append(itemQuit);
 
     tray.menu = menuTray;
+
+    // test sock5 proxy
+    function updateProxyMenuStatus() {
+        if (settings.enableProxy) {
+            // allow user to disable proxy
+            itemProxy.enabled = true;
+            return;
+        }
+        itemProxy.enabled = false;
+        var proxy = settings.proxy.trim(),
+            pos = proxy.lastIndexOf(':');
+        if (pos >= 0) {
+            var proxyHost = proxy.slice(0, pos),
+                proxyPort = parseInt(proxy.slice(pos + 1), 10),
+                socket = new require('net').Socket();
+            socket.connect(proxyPort, proxyHost, function() {
+                var request = new Buffer(3);
+                request[0] = 0x05;  // SOCKS version
+                request[1] = 0x01;  // number of authentication methods
+                request[2] = 0x00;  // no authentication
+                socket.write(request);
+            });
+            socket.on('data', function (data, start, end) {
+                if ((end - start === 2) && (data[start] === 0x05) && (data[start + 1] === 0x00)) {
+                    itemProxy.enabled = true;
+                }
+                socket.end();
+                if (!socket.destroyed) socket.destroy();
+            });
+            socket.on('error', function () {
+                socket.end();
+                if (!socket.destroyed) socket.destroy();
+            });
+        }
+    }
+
+    updateProxyMenuStatus();
 
     win.on('minimize', function () {
         win.blur();

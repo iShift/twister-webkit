@@ -5,6 +5,8 @@ translates = {
     'Request attention': 'Уведомлять о сообщениях',
     'Always on Top': 'Поверх окон',
     'Run Minimized': 'Запускать свернутым',
+    'Use proxy: ': 'Использовать прокси: ',
+    'DHT relay mode': 'Режим DHT relay',
     'Restart': 'Перезапустить',
     'Quit': 'Выход',
     'Open in browser': 'Открыть в браузере',
