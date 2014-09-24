@@ -157,18 +157,15 @@ window.addEventListener('init', function () {
     var bNewMessages = false;
     observer = new WebKitMutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
-            var title = mutation.target.textContent;
+            var title = mutation.target.textContent,
+                count = -1;
             if (mutation.target.tagName === 'TITLE' || mutation.target.parentNode.tagName === 'TITLE') {
                 title = title || 'twister';
                 win.title = title;
                 tray.tooltip = title;
                 bNewMessages = reNewMessages.test(title);
                 tray.icon = bNewMessages ? icon_new : icon_normal;
-                var count = 0;
-                if (bNewMessages) {
-                    count = title.match(reNewMessages)[1];
-                }
-                win.setBadgeLabel(count ? count : '');
+                count = bNewMessages ? title.match(reNewMessages)[1] : 0;
             } else {
                 bNewMessages = (title !== '');
             }
@@ -181,6 +178,12 @@ window.addEventListener('init', function () {
                     }
                 }
                 win.requestAttention(true);
+            }
+            console.log('Count: '+count);
+            if (count >= 0) {
+                setTimeout(function () {
+                    win.setBadgeLabel(count ? count : '');
+                }, 100);
             }
         });
     });
