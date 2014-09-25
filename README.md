@@ -5,6 +5,8 @@ Desktop app for twister (Multilanguage)
 
 Download https://github.com/iShift/twister-webkit/releases
 
+[![tip for next commit](https://tip4commit.com/projects/980.svg)](https://tip4commit.com/github/iShift/twister-webkit)
+
 Screenshots
 ===========
 ![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/screenshot_1.png "Screenshot 1")
@@ -49,8 +51,8 @@ to download prebuilt version of Twister core for Windows and generate all-in-one
 
 TODO
 ===========================
-- [ ] TOR settings
-- [ ] TCP Relay Settings
+- [X] TOR settings
+- [X] TCP Relay Settings
 - [ ] Key Encryption Settings (or in core?)
 - [ ] Key Backup/Sync Settings (Dropbox / Bittorrent Sync / Apple iCloud)
 - [ ] Proxy settings
