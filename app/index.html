@@ -30,13 +30,13 @@
             font-size: 80%;
             opacity: .92;
         }
-        #updater b {
+        #updater > b {
             display: block;
             background-color: #040;
             color: #fff;
             padding: 5px;
         }
-        #updater input {
+        #updater > input {
             -webkit-appearance: none;
             position: absolute;
             top: 0;
@@ -46,23 +46,23 @@
             padding: 1px;
             cursor:pointer;
         }
-        #updater input:focus {
+        #updater > input:focus {
             outline: none;
         }
-        #updater input:after {
+        #updater > input:after {
             content: "\25BC";
         }
-        #updater input:checked:after {
+        #updater > input:checked:after {
             content: "\25B2";
         }
-        #updater div {
+        #updater > div {
             display: none;
             padding: 5px;
         }
-        #updater input:checked + div {
+        #updater > input:checked + div {
             display: block;
         }
-        #updater div a {
+        #updater > div > a {
             display: block;
             background-color: #f80;
             color: #fff;
@@ -72,6 +72,14 @@
             text-decoration: none;
             padding: 5px;
             margin-top: 5px;
+        }
+        #updater > div > .changelog {
+            display: block;
+            padding: 5px 0 0;
+            overflow: hidden;
+            font-size: 70%;
+            font-weight: normal;
+            word-wrap: break-word;
         }
     </style>
 </head>
@@ -83,6 +91,7 @@
     <div>
         <span class="text"></span>
         <a href="" class="url" onclick="require('nw.gui').Shell.openExternal(this.href);return false;"></a>
+        <div class="changelog"></div>
     </div>
 </div>
 <iframe nwdisable nwfaketop id="twister" src="loader.html"

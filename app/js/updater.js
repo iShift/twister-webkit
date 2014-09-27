@@ -31,11 +31,13 @@ window.addEventListener('init', function () {
             if (req.readyState === 4 && req.status === 200) {
                 var response = JSON.parse(req.responseText),
                     bestVersion = currentVersion,
-                    url = '';
+                    url = '',
+                    changelog = '';
                 response.forEach(function (release) {
                     if (version_compare(bestVersion, release.tag_name) < 0) {
                         bestVersion = release.tag_name;
                         url = release.html_url;
+                        changelog = release.body;
                     }
                 });
                 if (url) {
@@ -44,6 +46,7 @@ window.addEventListener('init', function () {
                     $updater.querySelector('.text').innerText = __('New version is available');
                     $updater.querySelector('.url').innerText = __('Download');
                     $updater.querySelector('.url').setAttribute('href', url);
+                    $updater.querySelector('.changelog').innerText = changelog;
                     $updater.style.display = "block";
                 }
             }
