@@ -59,8 +59,8 @@ window.Twister = function () {
     }
 
     function getRandomPassword() {
-        var k = 2; // number of 24bit randoms
-        return require('crypto').randomBytes(3 * k).toString('hex');
+ 	var r = require('crypto').randomBytes(4).readUInt32LE(0) | 0x80000000;
+	return r.toString(36);
     }
 
     settings.twisterdPath = settings.twisterdPath || appDir + ds + 'bin' + ds + 'twisterd';
