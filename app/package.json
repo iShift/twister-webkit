@@ -1,7 +1,7 @@
 {
     "main": "index.html",
     "name": "twister",
-    "version": "0.9.25.2",
+    "version": "0.9.26.0",
     "description": "P2P microbloging system",
     "chromium-args": "--auth-schemes='basic'",
     "window": {
