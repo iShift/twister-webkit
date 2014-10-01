@@ -27,12 +27,9 @@ if (isWin32 && !process.env.HOME) {
     process.env.HOME = process.env.HOMEDRIVE + process.env.HOMEPATH;
 }
 
-
-// fix clipboard on os x
-if (process.platform === 'darwin') {
-var nw = require('nw.gui');
-win = nw.Window.get();
-var nativeMenuBar = new nw.Menu({ type: "menubar" });
-nativeMenuBar.createMacBuiltin("twister-webkit");
-win.menu = nativeMenuBar;
+// fix clipboard on OS X
+if (isMac) {
+    var nativeMenuBar = new gui.Menu({ type: 'menubar' });
+    nativeMenuBar.createMacBuiltin('twister-webkit');
+    win.menu = nativeMenuBar;
 }
