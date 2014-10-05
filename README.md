@@ -53,6 +53,7 @@ TODO
 ===========================
 - [X] TOR settings
 - [X] TCP Relay Settings
+- [ ] Notifications
 - [ ] Key Encryption Settings (or in core?)
 - [ ] Key Backup/Sync Settings (Dropbox / Bittorrent Sync / Apple iCloud)
 - [ ] Proxy settings
