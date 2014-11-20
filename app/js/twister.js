@@ -239,6 +239,7 @@ window.Twister = function () {
 
         win.addListener('twisterstop', function () {
             childDaemon = null;
+            isStop = false;
             if (callback) {
                 callback();
             }
@@ -252,6 +253,7 @@ window.Twister = function () {
                 childDaemon.unref();
             }
             curNodeIndex = Infinity;
+            isStop = false;
             setTimeout(function () {
                 if (childDaemon) {
                     try {
@@ -287,7 +289,6 @@ window.Twister = function () {
         }
         isRestart = true;
         that.stop(function () {
-            isStop = false;
             setTimeout(function () {
                 that.start(callback);
                 isRestart = false;
