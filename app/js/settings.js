@@ -46,10 +46,13 @@ window.Settings = function () {
         proxy: '127.0.0.1:9050',
         dhtProxy: false,
         twisterNodes: [
-            'seed3.twister.net.co',
-            'seed2.twister.net.co',
             'seed.twister.net.co',
-            'dnsseed.gombadi.com'
+            'dnsseed.gombadi.com',
+            'seed2.twister.net.co',
+            'cruller.tasty.sexy',
+            'seed3.twister.net.co',
+            'twisterseed.tk',
+            'cruller.tasty.sexy'
         ]
     };
 
