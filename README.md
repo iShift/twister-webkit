@@ -9,8 +9,8 @@ Download https://github.com/iShift/twister-webkit/releases
 
 Screenshots
 ===========
-![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/screenshot_1.png "Screenshot 1")
-![alt text](https://raw2.github.com/iShift/twister-webkit/master/screenshots/screenshot_1.png "Screenshot 2")
+![alt text](https://raw.githubusercontent.com/iShift/twister-webkit/master/screenshots/screenshot_1.png "Screenshot 1")
+![alt text](https://raw.githubusercontent.com/iShift/twister-webkit/master/screenshots/screenshot_2.png "Screenshot 2")
 
 Where I can get it?
 ================
