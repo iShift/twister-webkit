@@ -41,7 +41,7 @@ executable files for Windows, MacOS, Linux32 and Linux64:
 Build Windows setup package
 ===========================
 
-Download and setup NSIS (Nullsoft Scriptable Install System) 2.46: http://nsis.sourceforge.net/Download, and then run
+Download and setup NSIS (Nullsoft Scriptable Install System) 2.46: https://nsis.sourceforge.net/Download, and then run
 
     grunt
     grunt nsis
